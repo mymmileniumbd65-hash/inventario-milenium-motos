@@ -833,7 +833,7 @@ Expected: logs "Seed complete. Admin login: admin@mileniummotos.pe / ***REDACTED
 
 - [ ] **Step 3: Verify data landed (manual spot check)**
 
-In the Supabase dashboard: **Authentication → Users** should show `admin@mileniummotos.pe`. In **Table Editor**, `parts` should have 24 rows and `groups` should have 10 rows.
+In the Supabase dashboard: **Authentication → Users** should show `admin@mileniummotos.pe`. In **Table Editor**, `parts` should have 25 rows and `groups` should have 10 rows.
 
 - [ ] **Step 4: Commit**
 
@@ -939,7 +939,7 @@ async function main() {
 main();
 ```
 Run: `npx tsx src/db/verify.ts`
-Expected: `10 groups, 24 parts` and a sample part object with a non-empty `movements` array.
+Expected: `10 groups, 25 parts` and a sample part object with a non-empty `movements` array.
 Then delete `src/db/verify.ts` — it was only for manual verification.
 
 - [ ] **Step 3: Commit**
