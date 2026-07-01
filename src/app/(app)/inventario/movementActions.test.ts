@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { resolveSignedQty } from './movementActions';
+import { resolveSignedQty } from './movementLogic';
 
 describe('resolveSignedQty', () => {
   it('keeps ingreso positive', () => {
