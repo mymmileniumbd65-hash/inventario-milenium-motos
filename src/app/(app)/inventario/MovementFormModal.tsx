@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useEffect } from 'react';
 import type { PartComputed } from '@/lib/inventory';
 import { createMovement } from './movementActions';
 import type { ActionResult } from './actions';
@@ -12,9 +12,9 @@ async function action(_prev: ActionResult | null, formData: FormData): Promise<A
 export default function MovementFormModal({ parts, onClose, onSuccess }: { parts: PartComputed[]; onClose: () => void; onSuccess: () => void }) {
   const [result, formAction, isPending] = useActionState(action, null);
 
-  if (result && 'success' in result) {
-    onSuccess();
-  }
+  useEffect(() => {
+    if (result && 'success' in result) onSuccess();
+  }, [result, onSuccess]);
 
   return (
     <div style={{ position: 'fixed', inset: 0, background: 'rgba(20,26,38,0.42)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useEffect } from 'react';
 import type { PartComputed } from '@/lib/inventory';
 import { createPart, updatePart } from './partActions';
 import type { ActionResult } from './actions';
@@ -18,9 +18,9 @@ export default function PartFormModal({
   }
   const [result, formAction, isPending] = useActionState(action, null);
 
-  if (result && 'success' in result) {
-    onSuccess();
-  }
+  useEffect(() => {
+    if (result && 'success' in result) onSuccess();
+  }, [result, onSuccess]);
 
   return (
     <div style={{ position: 'fixed', inset: 0, background: 'rgba(20,26,38,0.42)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
