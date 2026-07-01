@@ -92,6 +92,7 @@ export default async function DashboardPage() {
                   </div>
                 </div>
               ))}
+              {groupBars.length === 0 && <div style={{ fontSize: 13, color: '#8a93a3' }}>Sin grupos registrados todavía.</div>}
             </div>
           </div>
         </div>
