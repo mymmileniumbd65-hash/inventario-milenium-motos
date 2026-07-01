@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+<template id="__bundler_thumbnail" data-bg-color="#1b2230">
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+<rect width="1200" height="800" fill="#1b2230"/>
+<g fill="#d9a93a" transform="translate(600 300)">
+<path d="M-120 60 L-150 -60 L-70 10 L0 -90 L70 10 L150 -60 L120 60 Z"/>
+<rect x="-120" y="70" width="240" height="34" rx="6"/>
+</g>
+<rect x="470" y="440" width="260" height="20" rx="10" fill="#ffffff"/>
+<rect x="510" y="482" width="180" height="14" rx="7" fill="#5b6472"/>
+</svg>
+</template>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:'Manrope',system-ui,sans-serif;background:#f6f7f9;color:#1b2230;-webkit-font-smoothing:antialiased}
+input,select,button{font-family:inherit}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#dfe3ea;border-radius:8px;border:2px solid #f6f7f9}
+@keyframes mmIn{from{transform:translateY(8px)}to{transform:none}}
+@keyframes mmSlide{from{transform:translateX(40px);opacity:.4}to{transform:none;opacity:1}}
+</style>
+</helmet>
+<div style="position:fixed;inset:0;display:flex;flex-direction:column;font-family:'Manrope',system-ui,sans-serif;color:#1b2230;background:#f6f7f9;overflow:hidden">
+
+  <sc-if value="{{ showLogin }}" hint-placeholder-val="{{ true }}">
+    <div style="flex:1;display:flex;min-height:0">
+      <div style="width:44%;min-width:380px;background:#1b2230;color:#fff;display:flex;flex-direction:column;justify-content:space-between;padding:52px 56px;position:relative;overflow:hidden">
+        <div style="position:absolute;right:-90px;top:-40px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle at 30% 30%, rgba(31,86,214,0.30), rgba(31,86,214,0) 70%)"></div>
+        <div style="display:flex;align-items:center;gap:14px;position:relative">
+          <img src="assets/milenium-crown.png" alt="Milenium" style="width:52px;height:auto;filter:drop-shadow(0 4px 10px rgba(0,0,0,.35))">
+          <div style="line-height:1.05">
+            <div style="font-size:20px;font-weight:800;letter-spacing:.01em">MILENIUM</div>
+            <div style="font-size:13px;font-weight:500;color:rgba(255,255,255,.6);letter-spacing:.34em">MOTOS</div>
+          </div>
+        </div>
+        <div style="position:relative">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.16em;color:rgba(255,255,255,.45);margin-bottom:16px">INVENTARIO DE REPUESTOS</div>
+          <div style="font-size:34px;font-weight:800;line-height:1.12;max-width:400px">Cada repuesto, clasificado y bajo control.</div>
+          <div style="font-size:15px;color:rgba(255,255,255,.62);margin-top:16px;max-width:370px;line-height:1.5">Control de stock por grupo y SKU, alertas automáticas de reposición, trazabilidad de movimientos y reportes para tus compras.</div>
+        </div>
+        <div style="position:relative;display:flex;gap:28px;font-family:'IBM Plex Mono',monospace;font-size:12px;color:rgba(255,255,255,.5)">
+          <span>{{ nGroups }} grupos</span><span>{{ nSkus }} SKUs</span><span>{{ nUnits }} unidades</span>
+        </div>
+      </div>
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:40px;background:#f6f7f9">
+        <div style="width:380px;max-width:100%;animation:mmIn .5s ease both">
+          <div style="font-size:26px;font-weight:800;letter-spacing:-.01em">Iniciar sesión</div>
+          <div style="font-size:14px;color:#5b6472;margin-top:6px">Ingresa con tu cuenta del sistema</div>
+          <div style="margin-top:28px">
+            <label style="display:block;font-size:13px;font-weight:600;color:#1b2230;margin-bottom:7px">Usuario</label>
+            <input value="{{ user }}" onInput="{{ onUser }}" placeholder="admin@mileniummotos.pe" style="width:100%;padding:13px 14px;border:1px solid #e3e6ec;border-radius:11px;font-size:14.5px;background:#fff;outline:none;color:#1b2230" style-focus="border:1px solid #1F56D6;box-shadow:0 0 0 3px rgba(31,86,214,.12)">
+          </div>
+          <div style="margin-top:16px">
+            <label style="display:block;font-size:13px;font-weight:600;color:#1b2230;margin-bottom:7px">Contraseña</label>
+            <input type="password" value="{{ pass }}" onInput="{{ onPass }}" placeholder="••••••••" style="width:100%;padding:13px 14px;border:1px solid #e3e6ec;border-radius:11px;font-size:14.5px;background:#fff;outline:none;color:#1b2230" style-focus="border:1px solid #1F56D6;box-shadow:0 0 0 3px rgba(31,86,214,.12)">
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:16px;font-size:13px">
+            <label style="display:flex;align-items:center;gap:8px;color:#5b6472;cursor:pointer"><input type="checkbox" checked="checked" style="width:15px;height:15px;accent-color:#1F56D6">Recordarme</label>
+            <span style="color:#1F56D6;font-weight:600;cursor:pointer">¿Olvidaste tu contraseña?</span>
+          </div>
+          <button onClick="{{ login }}" style="width:100%;margin-top:24px;padding:14px;background:#1F56D6;color:#fff;border:none;border-radius:11px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(31,86,214,.28)" style-hover="background:#1846B3">Ingresar al sistema</button>
+          <div style="margin-top:18px;font-size:12.5px;color:#8a93a3;text-align:center">Demo · cualquier credencial te deja entrar</div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showApp }}">
+    <div style="flex:1;display:flex;min-height:0">
+      <aside style="{{ sideStyle }}">
+        <div style="padding:22px 20px 18px;display:flex;align-items:center;gap:12px">
+          <img src="assets/milenium-crown.png" alt="Milenium" style="width:34px;height:auto">
+          <div style="line-height:1.05">
+            <div style="font-size:15px;font-weight:800;letter-spacing:.01em;color:{{ brandText }}">MILENIUM <span style="font-weight:500;color:{{ brandSub }}">MOTOS</span></div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.22em;color:{{ brandSub }};margin-top:2px">REPUESTOS</div>
+          </div>
+        </div>
+        <nav style="padding:8px 12px;display:flex;flex-direction:column;gap:3px;flex:1">
+          <button onClick="{{ onNav.dashboard }}" style="{{ nav.dashboard }}" style-hover="background:rgba(125,135,155,0.14)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="6" height="6" rx="1.6" stroke="currentColor" stroke-width="1.6"/><rect x="10" y="2" width="6" height="6" rx="1.6" stroke="currentColor" stroke-width="1.6"/><rect x="2" y="10" width="6" height="6" rx="1.6" stroke="currentColor" stroke-width="1.6"/><rect x="10" y="10" width="6" height="6" rx="1.6" stroke="currentColor" stroke-width="1.6"/></svg>
+            Panel general
+          </button>
+          <button onClick="{{ onNav.inventario }}" style="{{ nav.inventario }}" style-hover="background:rgba(125,135,155,0.14)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2.5" y="3" width="13" height="12" rx="2.2" stroke="currentColor" stroke-width="1.6"/><line x1="5.5" y1="7" x2="12.5" y2="7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><line x1="5.5" y1="10.5" x2="10" y2="10.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            Inventario
+          </button>
+          <button onClick="{{ onNav.alertas }}" style="{{ nav.alertas }}" style-hover="background:rgba(125,135,155,0.14)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3 L16 15 H2 Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><line x1="9" y1="7.5" x2="9" y2="11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="9" cy="13" r="0.9" fill="currentColor"/></svg>
+            <span style="flex:1">Alertas</span>
+            <span style="{{ navBadge }}">{{ notifCount }}</span>
+          </button>
+          <button onClick="{{ onNav.movimientos }}" style="{{ nav.movimientos }}" style-hover="background:rgba(125,135,155,0.14)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 6.5 H13 M13 6.5 L10.5 4 M13 6.5 L10.5 9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 11.5 H5 M5 11.5 L7.5 9 M5 11.5 L7.5 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Movimientos
+          </button>
+          <button onClick="{{ onNav.reportes }}" style="{{ nav.reportes }}" style-hover="background:rgba(125,135,155,0.14)">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><line x1="4" y1="15" x2="4" y2="9.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="9" y1="15" x2="9" y2="4.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="14" y1="15" x2="14" y2="11.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            Reportes
+          </button>
+        </nav>
+        <div style="{{ sideFootStyle }}">
+          <div style="display:flex;align-items:center;gap:11px">
+            <div style="width:36px;height:36px;border-radius:10px;background:#1F56D6;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px">AD</div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:13.5px;font-weight:700;color:{{ brandText }}">Admin</div>
+              <div style="font-size:11.5px;color:{{ brandSub }}">Administrador</div>
+            </div>
+            <button onClick="{{ logout }}" title="Salir" style="background:transparent;border:none;cursor:pointer;color:{{ brandSub }};padding:6px;border-radius:8px" style-hover="background:rgba(125,135,155,0.14)">
+              <svg width="17" height="17" viewBox="0 0 18 18" fill="none"><path d="M11 5 V3.5 H3.5 V14.5 H11 V13" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.5 9 H15 M15 9 L12.5 6.5 M15 9 L12.5 11.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <div style="flex:1;display:flex;flex-direction:column;min-width:0">
+        <header style="height:66px;flex:none;background:#fff;border-bottom:1px solid #eef1f5;display:flex;align-items:center;gap:20px;padding:0 28px">
+          <div style="flex:none;white-space:nowrap">
+            <div style="font-size:17px;font-weight:800;letter-spacing:-.01em;line-height:1.1">{{ viewTitle }}</div>
+            <div style="font-size:12.5px;color:#8a93a3;margin-top:2px">{{ viewSub }}</div>
+          </div>
+          <div style="flex:1;display:flex;justify-content:flex-end;align-items:center;gap:12px">
+            <div style="position:relative;width:280px;max-width:38vw">
+              <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#a7adb8;pointer-events:none">
+                <svg width="16" height="16" viewBox="0 0 18 18" fill="none"><circle cx="8" cy="8" r="5.5" stroke="currentColor" stroke-width="1.6"/><line x1="12.2" y1="12.2" x2="15.5" y2="15.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              </span>
+              <input value="{{ query }}" onInput="{{ onQuery }}" placeholder="Buscar repuesto, SKU o grupo…" style="width:100%;padding:10px 12px 10px 36px;border:1px solid #eef1f5;border-radius:10px;font-size:13.5px;background:#f6f7f9;outline:none" style-focus="border:1px solid #1F56D6;background:#fff;box-shadow:0 0 0 3px rgba(31,86,214,.10)">
+            </div>
+            <select value="{{ group }}" onChange="{{ onGroup }}" style="padding:10px 12px;border:1px solid #eef1f5;border-radius:10px;font-size:13.5px;background:#fff;color:#1b2230;outline:none;cursor:pointer;font-weight:600;max-width:190px">
+              <option value="all">Todos los grupos</option>
+              <sc-for list="{{ groupOpts }}" as="g" hint-placeholder-count="10"><option value="{{ g.id }}">{{ g.name }}</option></sc-for>
+            </select>
+            <button onClick="{{ onNav.alertas }}" title="Alertas" style="position:relative;width:40px;height:40px;border:1px solid #eef1f5;border-radius:10px;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#5b6472;flex:none" style-hover="background:#f6f7f9">
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M5 7.5 a4 4 0 0 1 8 0 c0 3 1.2 4 1.7 4.7 H3.3 C3.8 11.5 5 10.5 5 7.5 Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M7.4 14.5 a1.6 1.6 0 0 0 3.2 0" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              <span style="position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;padding:0 4px;background:#E23B3B;color:#fff;border-radius:9px;font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #fff">{{ notifCount }}</span>
+            </button>
+          </div>
+        </header>
+
+        <main style="flex:1;overflow:auto;padding:26px 28px 40px">
+
+          <sc-if value="{{ vDash }}">
+            <div style="animation:mmIn .35s ease both">
+              <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:16px">
+                <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="5">
+                  <div style="background:#fff;border:1px solid #eef1f5;border-radius:16px;padding:18px 18px 16px">
+                    <div style="display:flex;align-items:center;gap:7px"><span style="{{ k.dot }}"></span><span style="font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#8a93a3">{{ k.label }}</span></div>
+                    <div style="font-size:30px;font-weight:800;letter-spacing:-.02em;margin-top:10px;line-height:1">{{ k.value }}</div>
+                    <div style="font-size:12px;color:#5b6472;margin-top:7px">{{ k.sub }}</div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:20px;align-items:start;margin-top:20px">
+                <div style="display:flex;flex-direction:column;gap:20px">
+                  <div style="background:#fff;border:1px solid #eef1f5;border-radius:16px;padding:18px 20px">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+                      <div style="font-size:15px;font-weight:800">Alertas activas</div>
+                      <span onClick="{{ onNav.alertas }}" style="font-size:12.5px;font-weight:600;color:#1F56D6;cursor:pointer">Ver todas →</span>
+                    </div>
+                    <sc-for list="{{ alertsTop }}" as="a" hint-placeholder-count="4">
+                      <div style="display:flex;gap:12px;padding:12px 0;border-top:1px solid #f3f4f7">
+                        <span style="{{ a.sevDot }}"></span>
+                        <div style="flex:1;min-width:0">
+                          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+                            <span style="font-weight:700;font-size:13.5px">{{ a.tipo }} · {{ a.sku }}</span>
+                            <span style="{{ a.sevBadge }}">{{ a.sev }}</span>
+                          </div>
+                          <div style="font-size:12.5px;color:#5b6472;margin-top:3px">{{ a.detail }}</div>
+                        </div>
+                      </div>
+                    </sc-for>
+                  </div>
+                  <div style="background:#fff;border:1px solid #eef1f5;border-radius:16px;padding:18px 20px">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+                      <div style="font-size:15px;font-weight:800">Movimientos recientes</div>
+                      <span onClick="{{ onNav.movimientos }}" style="font-size:12.5px;font-weight:600;color:#1F56D6;cursor:pointer">Ver todos →</span>
+                    </div>
+                    <sc-for list="{{ movTop }}" as="m" hint-placeholder-count="4">
+                      <div style="display:flex;gap:12px;align-items:center;padding:11px 0;border-top:1px solid #f3f4f7">
+                        <span style="{{ m.typeBadge }}">{{ m.tipo }}</span>
+                        <div style="flex:1;min-width:0">
+                          <div style="font-size:13.5px;font-weight:700"><span style="{{ m.qtyStyle }}">{{ m.qtyLabel }}</span> {{ m.item }}</div>
+                          <div style="font-size:12px;color:#8a93a3;margin-top:2px">{{ m.from }} → {{ m.to }} · <span style="font-family:'IBM Plex Mono',monospace;color:#5b6472">{{ m.code }}</span></div>
+                        </div>
+                        <div style="text-align:right;font-size:11.5px;color:#8a93a3;flex:none"><div style="font-weight:600;color:#5b6472">{{ m.fecha }}</div><div>{{ m.user }}</div></div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:20px">
+                  <div style="background:#fff;border:1px solid #eef1f5;border-radius:16px;padding:18px 20px">
+                    <div style="font-size:15px;font-weight:800;margin-bottom:14px">Rotación más lenta</div>
+                    <sc-for list="{{ slowTop }}" as="s" hint-placeholder-count="5">
+                      <div style="margin-bottom:14px">
+                        <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:13px;font-weight:600">{{ s.sku }}</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;color:{{ s.color }}">{{ s.rotLabel }}</span></div>
+                        <div style="height:8px;background:#eef1f5;border-radius:6px;margin-top:6px;overflow:hidden"><div style="{{ s.barStyle }}"></div></div>
+                      </div>
+                    </sc-for>
+                    <div style="font-size:11.5px;color:#8a93a3;margin-top:2px">Días promedio que una unidad permanece en stock.</div>
+                  </div>
+                  <div style="background:#fff;border:1px solid #eef1f5;border-radius:16px;padding:18px 20px">
+                    <div style="font-size:15px;font-weight:800;margin-bottom:14px">Stock por grupo</div>
+                    <sc-for list="{{ groupBars }}" as="d" hint-placeholder-count="6">
+                      <div style="margin-bottom:12px">
+                        <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:13px;font-weight:600">{{ d.name }}</span><span style="font-size:12.5px;color:#5b6472"><b style="color:#1b2230">{{ d.count }}</b> u. · {{ d.skus }} SKU</span></div>
+                        <div style="height:8px;background:#eef1f5;border-radius:6px;margin-top:6px;overflow:hidden"><div style="{{ d.barStyle }}"></div></div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ vInv }}">
+            <div style="animation:mmIn .35s ease both">
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+                <sc-for list="{{ groupChips }}" as="c" hint-placeholder-count="6"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button></sc-for>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+                <div style="font-size:13px;color:#5b6472"><b style="color:#1b2230">{{ invCount }}</b> SKUs · <b style="color:#1b2230">{{ invUnits }}</b> unidades {{ groupLabel }}</div>
+                <button style="padding:10px 16px;background:#1F56D6;color:#fff;border:none;border-radius:10px;font-size:13.5px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:7px" style-hover="background:#1846B3"><span style="font-size:17px;line-height:1">+</span> Registrar ingreso</button>
+              </div>
+              <div style="background:#fff;border:1px solid #eef1f5;border-radius:16px;overflow:hidden">
+                <table style="width:100%;border-collapse:collapse">
+                  <thead><tr style="background:#fbfbfc">
+                    <th style="text-align:left;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#8a93a3;padding:13px 16px;border-bottom:1px solid #eef1f5">SKU / Repuesto</th>
+                    <th style="text-align:left;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#8a93a3;padding:13px 14px;border-bottom:1px solid #eef1f5">Grupo</th>
+                    <th style="text-align:center;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#8a93a3;padding:13px 14px;border-bottom:1px solid #eef1f5">Stock</th>
+                    <th style="text-align:center;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#8a93a3;padding:13px 14px;border-bottom:1px solid #eef1f5">Mín</th>
+                    <th style="text-align:left;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#8a93a3;padding:13px 14px;border-bottom:1px solid #eef1f5">Estado</th>
+                    <th style="text-align:left;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#8a93a3;padding:13px 14px;border-bottom:1px solid #eef1f5">Rotación</th>
+                    <th style="border-bottom:1px solid #eef1f5;width:30px"></th>
+                  </tr></thead>
+                  <tbody>
+                    <sc-for list="{{ invRows }}" as="row" hint-placeholder-count="8">
+                      <tr onClick="{{ row.open }}" style="{{ row.rowStyle }}" style-hover="background:#f6f7fb">
+                        <td style="padding:13px 16px;border-bottom:1px solid #f3f4f7"><div style="font-size:14px;font-weight:700">{{ row.desc }}</div><div style="font-size:11.5px;color:#8a93a3;font-family:'IBM Plex Mono',monospace;margin-top:1px">{{ row.sku }}</div></td>
+                        <td style="padding:13px 14px;border-bottom:1px solid #f3f4f7"><span style="font-size:12px;font-weight:600;color:#5b6472;background:#f1f3f6;padding:3px 9px;border-radius:7px">{{ row.groupName }}</span></td>
+                        <td style="padding:13px 14px;border-bottom:1px solid #f3f4f7;text-align:center;font-size:15px;font-weight:800">{{ row.stock }}</td>
+                        <td style="padding:13px 14px;border-bottom:1px solid #f3f4f7;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:13px;color:#8a93a3">{{ row.min }}</td>
+                        <td style="padding:13px 14px;border-bottom:1px solid #f3f4f7"><span style="{{ row.statusStyle }}"><span style="{{ row.statusDot }}"></span>{{ row.statusLabel }}</span></td>
+                        <td style="padding:13px 14px;border-bottom:1px solid #f3f4f7;font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:{{ row.rotColor }}">{{ row.rotLabel }}</td>
+                        <td style="padding:13px 10px;border-bottom:1px solid #f3f4f7;color:#c4c9d2"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3 L9 7 L5 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></td>
+                      </tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+                <sc-if value="{{ invEmpty }}"><div style="padding:36px;text-align:center;color:#8a93a3;font-size:14px">Sin resultados para tu búsqueda.</div></sc-if>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ vAlert }}">
+            <div style="animation:mmIn .35s ease both">
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px">
+                <div style="background:#fff;border:1px solid #eef1f5;border-radius:16px;padding:18px 20px;border-left:4px solid #E23B3B"><div style="font-size:12px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:#c0322f">Críticas</div><div style="font-size:30px;font-weight:800;margin-top:6px">{{ critCount }}</div><div style="font-size:12px;color:#5b6472;margin-top:2px">Agotado — reposición urgente</div></div>
+                <div style="background:#fff;border:1px solid #eef1f5;border-radius:16px;padding:18px 20px;border-left:4px solid #e8870f"><div style="font-size:12px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:#b3640f">Altas</div><div style="font-size:30px;font-weight:800;margin-top:6px">{{ altaCount }}</div><div style="font-size:12px;color:#5b6472;margin-top:2px">Por debajo del mínimo</div></div>
+                <div style="background:#fff;border:1px solid #eef1f5;border-radius:16px;padding:18px 20px;border-left:4px solid #1F56D6"><div style="font-size:12px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:#1846B3">Medias</div><div style="font-size:30px;font-weight:800;margin-top:6px">{{ mediaCount }}</div><div style="font-size:12px;color:#5b6472;margin-top:2px">Rotación lenta y exceso</div></div>
+              </div>
+              <div style="background:#fff;border:1px solid #eef1f5;border-radius:16px;overflow:hidden">
+                <div style="padding:16px 20px;border-bottom:1px solid #eef1f5;font-size:15px;font-weight:800">Todas las alertas <span style="font-weight:500;color:#8a93a3">· generadas automáticamente</span></div>
+                <sc-for list="{{ alerts }}" as="a" hint-placeholder-count="6">
+                  <div style="display:flex;align-items:center;gap:16px;padding:15px 20px;border-bottom:1px solid #f3f4f7">
+                    <span style="{{ a.sevDot }}"></span>
+                    <div style="width:150px;flex:none"><div style="font-size:14px;font-weight:700">{{ a.tipo }}</div><span style="{{ a.sevBadge }}">{{ a.sev }}</span></div>
+                    <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:600">{{ a.sku }} <span style="color:#8a93a3;font-weight:500;font-size:12px">· {{ a.groupName }}</span></div><div style="font-size:12.5px;color:#5b6472;margin-top:2px">{{ a.detail }}</div></div>
+                    <div style="width:210px;flex:none;font-size:12.5px;color:#5b6472"><span style="color:#8a93a3">Sugerido:</span> {{ a.accion }}</div>
+                    <button style="{{ a.btnStyle }}" style-hover="filter:brightness(.94)">{{ a.btn }}</button>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ vMov }}">
+            <div style="animation:mmIn .35s ease both">
+              <div style="display:flex;gap:8px;margin-bottom:18px">
+                <sc-for list="{{ movChips }}" as="c" hint-placeholder-count="4"><button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button></sc-for>
+              </div>
+              <div style="background:#fff;border:1px solid #eef1f5;border-radius:16px;padding:8px 24px 18px">
+                <sc-for list="{{ movFiltered }}" as="m" hint-placeholder-count="6">
+                  <div style="display:flex;gap:16px;padding:16px 0;border-bottom:1px solid #f3f4f7">
+                    <div style="display:flex;flex-direction:column;align-items:center;width:14px;flex:none;padding-top:3px"><span style="{{ m.dotStyle }}"></span><span style="width:2px;flex:1;background:#eef1f5;margin-top:4px"></span></div>
+                    <div style="flex:1;min-width:0">
+                      <div style="display:flex;align-items:center;gap:10px"><span style="{{ m.typeBadge }}">{{ m.tipo }}</span><span style="font-size:14.5px;font-weight:700"><span style="{{ m.qtyStyle }}">{{ m.qtyLabel }}</span> {{ m.item }}</span></div>
+                      <div style="font-size:13px;color:#5b6472;margin-top:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                        <span>{{ m.from }}</span><span style="color:#c4c9d2">→</span><span style="font-weight:600;color:#1b2230">{{ m.to }}</span>
+                        <span style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:#5b6472;background:#f1f3f6;padding:2px 8px;border-radius:6px">{{ m.code }}</span>
+                      </div>
+                    </div>
+                    <div style="text-align:right;flex:none;font-size:12px"><div style="font-weight:700;color:#1b2230">{{ m.fecha }}</div><div style="color:#8a93a3;margin-top:2px">por {{ m.user }}</div></div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ vRep }}">
+            <div style="animation:mmIn .35s ease both">
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px">
+                <sc-for list="{{ repKpis }}" as="k" hint-placeholder-count="4">
+                  <div style="background:#fff;border:1px solid #eef1f5;border-radius:16px;padding:18px 18px 16px"><div style="font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#8a93a3">{{ k.label }}</div><div style="font-size:30px;font-weight:800;margin-top:10px;line-height:1">{{ k.value }}</div><div style="font-size:12px;color:#5b6472;margin-top:7px">{{ k.sub }}</div></div>
+                </sc-for>
+              </div>
+              <div style="background:#fff;border:1px solid #eef1f5;border-radius:16px;overflow:hidden;margin-bottom:20px">
+                <div style="padding:16px 20px;border-bottom:1px solid #eef1f5;display:flex;align-items:center;justify-content:space-between">
+                  <div><div style="font-size:15px;font-weight:800">Compras sugeridas</div><div style="font-size:12px;color:#8a93a3;margin-top:1px">SKUs bajo el stock mínimo, priorizados por urgencia.</div></div>
+                  <button style="padding:9px 15px;background:#1F56D6;color:#fff;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer" style-hover="background:#1846B3">Generar orden de compra</button>
+                </div>
+                <table style="width:100%;border-collapse:collapse">
+                  <thead><tr style="background:#fbfbfc">
+                    <th style="text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#8a93a3;padding:12px 20px;border-bottom:1px solid #eef1f5">SKU / Repuesto</th>
+                    <th style="text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#8a93a3;padding:12px 14px;border-bottom:1px solid #eef1f5">Grupo</th>
+                    <th style="text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#8a93a3;padding:12px 14px;border-bottom:1px solid #eef1f5">Actual</th>
+                    <th style="text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#8a93a3;padding:12px 14px;border-bottom:1px solid #eef1f5">Mínimo</th>
+                    <th style="text-align:center;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#8a93a3;padding:12px 14px;border-bottom:1px solid #eef1f5">Sugerido</th>
+                    <th style="text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:#8a93a3;padding:12px 20px;border-bottom:1px solid #eef1f5">Prioridad</th>
+                  </tr></thead>
+                  <tbody>
+                    <sc-for list="{{ comprasRows }}" as="r" hint-placeholder-count="4">
+                      <tr><td style="padding:13px 20px;border-bottom:1px solid #f3f4f7"><div style="font-size:14px;font-weight:700">{{ r.desc }}</div><div style="font-size:11.5px;color:#8a93a3;font-family:'IBM Plex Mono',monospace">{{ r.sku }}</div></td>
+                      <td style="padding:13px 14px;border-bottom:1px solid #f3f4f7"><span style="font-size:12px;font-weight:600;color:#5b6472;background:#f1f3f6;padding:3px 9px;border-radius:7px">{{ r.groupName }}</span></td>
+                      <td style="padding:13px 14px;border-bottom:1px solid #f3f4f7;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;color:{{ r.actualColor }}">{{ r.actual }}</td>
+                      <td style="padding:13px 14px;border-bottom:1px solid #f3f4f7;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:14px;color:#8a93a3">{{ r.min }}</td>
+                      <td style="padding:13px 14px;border-bottom:1px solid #f3f4f7;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:700;color:#1F56D6">+{{ r.sugerido }}</td>
+                      <td style="padding:13px 20px;border-bottom:1px solid #f3f4f7"><span style="{{ r.prioStyle }}">{{ r.prio }}</span></td></tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+                <div style="background:#fff;border:1px solid #eef1f5;border-radius:16px;padding:18px 20px">
+                  <div style="font-size:15px;font-weight:800;margin-bottom:4px">Rotación por SKU</div>
+                  <div style="font-size:12px;color:#8a93a3;margin-bottom:14px">Días promedio en stock — menor es mejor.</div>
+                  <sc-for list="{{ slowAll }}" as="s" hint-placeholder-count="6">
+                    <div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:13px;font-weight:600">{{ s.sku }}</span><span style="font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;color:{{ s.color }}">{{ s.rotLabel }}</span></div><div style="height:8px;background:#eef1f5;border-radius:6px;margin-top:6px;overflow:hidden"><div style="{{ s.barStyle }}"></div></div></div>
+                  </sc-for>
+                </div>
+                <div style="background:#fff;border:1px solid #eef1f5;border-radius:16px;padding:18px 20px">
+                  <div style="font-size:15px;font-weight:800;margin-bottom:4px">Inventario por grupo</div>
+                  <div style="font-size:12px;color:#8a93a3;margin-bottom:14px">Participación de cada grupo en el stock total.</div>
+                  <sc-for list="{{ groupBars }}" as="d" hint-placeholder-count="6">
+                    <div style="margin-bottom:13px"><div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:13px;font-weight:600">{{ d.name }}</span><span style="font-size:12.5px;color:#5b6472"><b style="color:#1b2230">{{ d.count }}</b> u. · {{ d.pct }}%</span></div><div style="height:8px;background:#eef1f5;border-radius:6px;margin-top:6px;overflow:hidden"><div style="{{ d.barStyle }}"></div></div></div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+        </main>
+      </div>
+    </div>
+
+    <sc-if value="{{ drawerOpen }}">
+      <div onClick="{{ closeDrawer }}" style="position:fixed;inset:0;background:rgba(20,26,38,0.42);z-index:40;animation:mmIn .2s ease both"></div>
+      <div style="position:fixed;top:0;right:0;bottom:0;width:620px;max-width:94vw;background:#fff;z-index:41;display:flex;flex-direction:column;box-shadow:-12px 0 40px rgba(20,26,38,.18);animation:mmSlide .28s cubic-bezier(.2,.7,.3,1) both">
+        <div style="padding:22px 26px;border-bottom:1px solid #eef1f5;display:flex;align-items:flex-start;gap:14px">
+          <div style="flex:1;min-width:0">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:#8a93a3">{{ drawerGroup }} › {{ drawerSku }}</div>
+            <div style="font-size:21px;font-weight:800;margin-top:4px">{{ drawerDesc }}</div>
+            <div style="display:flex;gap:18px;margin-top:10px;font-size:13px;color:#5b6472;align-items:center">
+              <span><b style="color:#1b2230;font-size:15px">{{ drawerStock }}</b> unidades</span>
+              <span><span style="{{ drawerStatusStyle }}"><span style="{{ drawerStatusDot }}"></span>{{ drawerStatusLabel }}</span></span>
+            </div>
+          </div>
+          <button onClick="{{ closeDrawer }}" style="width:36px;height:36px;border:1px solid #eef1f5;border-radius:10px;background:#fff;cursor:pointer;color:#5b6472;display:flex;align-items:center;justify-content:center;flex:none" style-hover="background:#f6f7f9"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 4 L12 12 M12 4 L4 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+        </div>
+        <div style="padding:20px 26px 8px">
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+            <div style="background:#f6f7f9;border-radius:12px;padding:13px 14px"><div style="font-size:11px;color:#8a93a3;font-weight:700;text-transform:uppercase;letter-spacing:.03em">Stock</div><div style="font-size:22px;font-weight:800;margin-top:4px">{{ drawerStock }}</div></div>
+            <div style="background:#f6f7f9;border-radius:12px;padding:13px 14px"><div style="font-size:11px;color:#8a93a3;font-weight:700;text-transform:uppercase;letter-spacing:.03em">Mínimo</div><div style="font-size:22px;font-weight:800;margin-top:4px;font-family:'IBM Plex Mono',monospace">{{ drawerMin }}</div></div>
+            <div style="background:#f6f7f9;border-radius:12px;padding:13px 14px"><div style="font-size:11px;color:#8a93a3;font-weight:700;text-transform:uppercase;letter-spacing:.03em">Rotación</div><div style="font-size:22px;font-weight:800;margin-top:4px;font-family:'IBM Plex Mono',monospace;color:{{ drawerRotColor }}">{{ drawerRot }}</div></div>
+            <div style="background:#f6f7f9;border-radius:12px;padding:13px 14px"><div style="font-size:11px;color:#8a93a3;font-weight:700;text-transform:uppercase;letter-spacing:.03em">Compat.</div><div style="font-size:13.5px;font-weight:700;margin-top:7px;line-height:1.25">{{ drawerCompat }}</div></div>
+          </div>
+        </div>
+        <div style="padding:14px 26px 6px;font-size:13.5px;font-weight:800">Movimientos de este SKU</div>
+        <div style="flex:1;overflow:auto;padding:0 26px 20px">
+          <sc-for list="{{ drawerHistory }}" as="h" hint-placeholder-count="5">
+            <div style="display:flex;align-items:center;gap:14px;padding:13px 0;border-top:1px solid #f3f4f7">
+              <span style="{{ h.typeBadge }}">{{ h.tipo }}</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:700;color:{{ h.qtyColor }};width:52px">{{ h.qtyLabel }}</span>
+              <div style="flex:1;min-width:0;font-size:12.5px;color:#5b6472">{{ h.flow }} · <span style="font-family:'IBM Plex Mono',monospace">{{ h.code }}</span></div>
+              <div style="text-align:right;flex:none;font-size:11.5px"><div style="font-weight:700;color:#1b2230">{{ h.fecha }}</div><div style="color:#8a93a3">por {{ h.user }}</div></div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;sidebarTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Oscuro&quot;,&quot;Claro&quot;],&quot;default&quot;:&quot;Oscuro&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Apariencia&quot;},&quot;defaultView&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;dashboard&quot;,&quot;inventario&quot;,&quot;alertas&quot;,&quot;movimientos&quot;,&quot;reportes&quot;],&quot;default&quot;:&quot;dashboard&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Apariencia&quot;},&quot;lowStockEmphasis&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Comportamiento&quot;}}">
+class Component extends DCLogic {
+  state = { loggedIn:false, view:null, query:'', group:'all', sel:null, user:'', pass:'', movFilter:'Todos' };
+
+  GROUPS = [
+    { id:'PAR', name:'Parabrisas', skus:[
+      { sku:'PAR-15', desc:'Parabrisas 15" ahumado', compat:'Universal', stock:9, min:4, rot:34 },
+      { sku:'PAR-17', desc:'Parabrisas 17" cristal', compat:'CB / FZ', stock:3, min:5, rot:61 },
+      { sku:'PAR-19', desc:'Parabrisas 19" ahumado', compat:'Touring', stock:0, min:3, rot:0 },
+    ]},
+    { id:'LLA', name:'Llantas', skus:[
+      { sku:'LLA-8017', desc:'Llanta 80/100-17', compat:'Delantera', stock:22, min:8, rot:16 },
+      { sku:'LLA-9017', desc:'Llanta 90/90-17', compat:'Delantera', stock:14, min:8, rot:21 },
+      { sku:'LLA-9018', desc:'Llanta 90/90-18', compat:'Trasera', stock:6, min:6, rot:30 },
+      { sku:'LLA-1017', desc:'Llanta 100/90-17', compat:'Trasera', stock:40, min:8, rot:12 },
+    ]},
+    { id:'CAD', name:'Cadenas', skus:[
+      { sku:'CAD-428', desc:'Cadena 428H · 120L', compat:'CB / YBR', stock:18, min:10, rot:19 },
+      { sku:'CAD-520', desc:'Cadena 520 · 112L', compat:'FZ / Pulsar', stock:2, min:6, rot:55 },
+    ]},
+    { id:'PAS', name:'Pastillas de freno', skus:[
+      { sku:'PAS-D190', desc:'Pastilla delantera CB190', compat:'CB190R', stock:12, min:8, rot:24 },
+      { sku:'PAS-DFZ', desc:'Pastilla delantera FZ25', compat:'FZ25', stock:5, min:6, rot:44 },
+      { sku:'PAS-TUNI', desc:'Pastilla trasera universal', compat:'Universal', stock:30, min:8, rot:20 },
+    ]},
+    { id:'FIL', name:'Filtros', skus:[
+      { sku:'FIL-ACH', desc:'Filtro de aceite Honda', compat:'Honda', stock:16, min:10, rot:18 },
+      { sku:'FIL-ACY', desc:'Filtro de aceite Yamaha', compat:'Yamaha', stock:9, min:8, rot:22 },
+      { sku:'FIL-AIR', desc:'Filtro de aire CB190', compat:'CB190R', stock:1, min:5, rot:70 },
+    ]},
+    { id:'BUJ', name:'Bujías', skus:[
+      { sku:'BUJ-CR7', desc:'Bujía NGK CR7HSA', compat:'125–160cc', stock:44, min:10, rot:14 },
+      { sku:'BUJ-CR8', desc:'Bujía NGK CR8E', compat:'190–250cc', stock:12, min:8, rot:26 },
+    ]},
+    { id:'ESP', name:'Espejos', skus:[
+      { sku:'ESP-UNI', desc:'Espejo universal 10mm (par)', compat:'Universal', stock:20, min:6, rot:28 },
+      { sku:'ESP-190', desc:'Espejo CB190 (par)', compat:'CB190R', stock:0, min:4, rot:0 },
+    ]},
+    { id:'BAT', name:'Baterías', skus:[
+      { sku:'BAT-5A', desc:'Batería 12V 5Ah gel', compat:'125–160cc', stock:7, min:5, rot:38 },
+      { sku:'BAT-7A', desc:'Batería 12V 7Ah gel', compat:'190–250cc', stock:3, min:5, rot:66 },
+    ]},
+    { id:'FOC', name:'Focos', skus:[
+      { sku:'FOC-H4', desc:'Foco H4 12V halógeno', compat:'Universal', stock:26, min:8, rot:17 },
+      { sku:'FOC-LED', desc:'Foco LED H4 6000K', compat:'Universal', stock:10, min:6, rot:33 },
+    ]},
+    { id:'KIT', name:'Kits de arrastre', skus:[
+      { sku:'KIT-190', desc:'Kit arrastre CB190', compat:'CB190R', stock:4, min:4, rot:40 },
+      { sku:'KIT-FZ', desc:'Kit arrastre FZ25', compat:'FZ25', stock:2, min:3, rot:58 },
+    ]},
+  ];
+
+  MOVS = [
+    { tipo:'Ingreso', qty:24, item:'Llanta 90/90-17', code:'OC-3312', from:'Proveedor Michelin', to:'Almacén', user:'Admin', fecha:'Hoy · 09:14' },
+    { tipo:'Salida', qty:-2, item:'Pastilla delantera FZ25', code:'VTA-8841', from:'Almacén', to:'Mostrador · Venta', user:'L. Díaz', fecha:'Hoy · 08:40' },
+    { tipo:'Ajuste', qty:-1, item:'Foco LED H4 6000K', code:'AJ-204', from:'Almacén', to:'Merma / dañado', user:'Admin', fecha:'Ayer · 17:22' },
+    { tipo:'Ingreso', qty:20, item:'Bujía NGK CR7HSA', code:'OC-3308', from:'Proveedor NGK', to:'Almacén', user:'Admin', fecha:'Ayer · 15:10' },
+    { tipo:'Salida', qty:-4, item:'Kit arrastre CB190', code:'TAL-119', from:'Almacén', to:'Taller · Servicio', user:'M. Soto', fecha:'Ayer · 11:05' },
+    { tipo:'Salida', qty:-3, item:'Filtro de aceite Honda', code:'VTA-8836', from:'Almacén', to:'Mostrador · Venta', user:'L. Díaz', fecha:'28 jun · 16:30' },
+    { tipo:'Ingreso', qty:8, item:'Parabrisas 15" ahumado', code:'OC-3301', from:'Proveedor Genérico', to:'Almacén', user:'Admin', fecha:'28 jun · 12:08' },
+    { tipo:'Salida', qty:-5, item:'Cadena 520 · 112L', code:'VTA-8829', from:'Almacén', to:'Mostrador · Venta', user:'M. Soto', fecha:'27 jun · 10:45' },
+  ];
+
+  allSkus(){ const out=[]; this.GROUPS.forEach(g=>g.skus.forEach(s=>out.push({...s,groupId:g.id,groupName:g.name}))); return out; }
+  statusOf(s){ if(s.stock===0) return 'Agotado'; if(s.stock<s.min) return 'Stock bajo'; if(s.stock>=s.min*4) return 'Exceso'; return 'Disponible'; }
+
+  badgeStock(label){
+    const base={display:'inline-flex',alignItems:'center',gap:'6px',padding:'3px 9px',borderRadius:'999px',fontSize:'12px',fontWeight:600,lineHeight:1.4,whiteSpace:'nowrap'};
+    const M={'Disponible':['#e7f6ee','#1b7a47','#1f9d57'],'Stock bajo':['#fdeede','#b3640f','#e8870f'],'Agotado':['#fde8e8','#c0322f','#E23B3B'],'Exceso':['#e8eefc','#1846B3','#1F56D6']};
+    const c=M[label]||['#eef1f5','#5b6472','#8a93a3'];
+    return { label, style:{...base,background:c[0],color:c[1]}, dot:{width:'6px',height:'6px',borderRadius:'50%',flex:'none',background:c[2]} };
+  }
+
+  genHistory(s){
+    const users=['Admin','J. Ramos','L. Díaz','M. Soto'];
+    const seq=[['Ingreso',1,'Proveedor → Almacén'],['Salida',-1,'Almacén → Mostrador'],['Salida',-1,'Almacén → Taller'],['Ajuste',-1,'Almacén → Merma'],['Ingreso',1,'Proveedor → Almacén'],['Salida',-1,'Almacén → Mostrador']];
+    const dates=['Hoy · 10:12','Ayer · 16:40','24 jun · 09:30','20 jun · 14:05','15 jun · 11:20'];
+    const typeMap={'Ingreso':['#e7f6ee','#1b7a47'],'Salida':['#fbf3d6','#8a6a12'],'Ajuste':['#fde8e8','#c0322f']};
+    const seed=s.sku.length+s.stock+s.min;
+    const out=[];
+    for(let i=0;i<5;i++){ const t=seq[(seed+i)%seq.length]; const q=t[1]*(1+((seed*(i+1))%6)); const pos=q>=0;
+      const c=typeMap[t[0]];
+      out.push({ tipo:t[0], flow:t[2], code:(t[0]==='Ingreso'?'OC-':t[0]==='Salida'?'VTA-':'AJ-')+(3000+((seed*31+i*7)%900)),
+        fecha:dates[i], user:users[(seed+i)%users.length],
+        qtyLabel:(pos?'+':'−')+Math.abs(q), qtyColor:pos?'#1b7a47':'#c0322f',
+        typeBadge:{display:'inline-flex',alignItems:'center',padding:'3px 10px',borderRadius:'999px',fontSize:'11.5px',fontWeight:700,background:c[0],color:c[1]} });
+    }
+    return out;
+  }
+
+  renderVals(){
+    const st=this.state;
+    const view = st.view || this.props.defaultView || 'dashboard';
+    const dark = (this.props.sidebarTheme||'Oscuro') !== 'Claro';
+    const primary = '#1F56D6';
+    const emph = this.props.lowStockEmphasis !== false;
+    const skus=this.allSkus();
+    const totalAll=skus.reduce((s,x)=>s+x.stock,0);
+
+    // nav
+    const navBase={display:'flex',alignItems:'center',gap:'12px',width:'100%',padding:'11px 14px',border:'none',borderRadius:'10px',fontFamily:'inherit',fontSize:'14px',fontWeight:600,cursor:'pointer',textAlign:'left'};
+    const navStyle=key=>{
+      if(view===key) return {...navBase,background: dark?'rgba(31,86,214,0.24)':'#eef3ff', color: dark?'#fff':primary, boxShadow:'inset 3px 0 0 '+primary};
+      return {...navBase,background:'transparent', color: dark?'rgba(255,255,255,0.64)':'#5b6472'};
+    };
+    const nav={dashboard:navStyle('dashboard'),inventario:navStyle('inventario'),alertas:navStyle('alertas'),movimientos:navStyle('movimientos'),reportes:navStyle('reportes')};
+    const onNav={dashboard:()=>this.setState({view:'dashboard'}),inventario:()=>this.setState({view:'inventario'}),alertas:()=>this.setState({view:'alertas'}),movimientos:()=>this.setState({view:'movimientos'}),reportes:()=>this.setState({view:'reportes'})};
+
+    // alerts
+    const sevMap={'Crítica':['#fde8e8','#c0322f','#E23B3B'],'Alta':['#fdeede','#b3640f','#e8870f'],'Media':['#e8eefc','#1846B3','#1F56D6']};
+    const sevBadge=s=>({display:'inline-flex',alignItems:'center',padding:'2px 9px',borderRadius:'999px',fontSize:'11px',fontWeight:700,marginTop:'5px',background:sevMap[s][0],color:sevMap[s][1]});
+    const sevDot=s=>({width:'9px',height:'9px',borderRadius:'50%',flex:'none',background:sevMap[s][2]});
+    const btnStyle=s=>({padding:'8px 13px',borderRadius:'9px',fontSize:'12.5px',fontWeight:700,cursor:'pointer',border:'none',flex:'none',background:sevMap[s][0],color:sevMap[s][1]});
+    const alerts=[];
+    skus.forEach(s=>{
+      if(s.stock===0) alerts.push({sev:'Crítica',tipo:'Agotado',sku:s.desc,groupName:s.groupName,detail:'0 unidades en stock',accion:'reponer '+(s.min*2)+' u.',btn:'Generar OC'});
+      else if(s.stock<s.min) alerts.push({sev:'Alta',tipo:'Stock bajo',sku:s.desc,groupName:s.groupName,detail:s.stock+' u. · mínimo '+s.min+' u.',accion:'reponer '+(s.min*2-s.stock)+' u.',btn:'Generar OC'});
+      if(s.stock>0&&s.rot>=60) alerts.push({sev:'Media',tipo:'Baja rotación',sku:s.desc,groupName:s.groupName,detail:s.rot+' días promedio en stock',accion:'promoción / descuento',btn:'Revisar'});
+      if(s.stock>=s.min*4) alerts.push({sev:'Media',tipo:'Exceso de stock',sku:s.desc,groupName:s.groupName,detail:s.stock+' u. · '+(s.stock/s.min).toFixed(1)+'× el mínimo',accion:'pausar compra',btn:'Revisar'});
+    });
+    const ord={'Crítica':0,'Alta':1,'Media':2};
+    alerts.sort((a,b)=>ord[a.sev]-ord[b.sev]);
+    alerts.forEach(a=>{a.sevBadge=sevBadge(a.sev);a.sevDot=sevDot(a.sev);a.btnStyle=btnStyle(a.sev);});
+    const critCount=alerts.filter(a=>a.sev==='Crítica').length;
+    const altaCount=alerts.filter(a=>a.sev==='Alta').length;
+    const mediaCount=alerts.filter(a=>a.sev==='Media').length;
+
+    // group bars
+    const groupColors=['#1F56D6','#1846B3','#3a68cf','#5b78c4','#7089c9','#8a9bd0','#2f6bd6','#4a74cc','#6382c6','#93a3d4'];
+    const gStats=this.GROUPS.map(g=>({id:g.id,name:g.name,count:g.skus.reduce((s,x)=>s+x.stock,0),skus:g.skus.length}));
+    const maxG=Math.max(...gStats.map(g=>g.count));
+    const groupBars=gStats.map((g,i)=>({name:g.name,count:g.count,skus:g.skus,pct:Math.round(g.count/totalAll*100),barStyle:{height:'100%',width:(g.count/maxG*100)+'%',background:groupColors[i%groupColors.length],borderRadius:'6px'}}));
+
+    // slow movers
+    const rotColor=r=> r>=60?'#E23B3B':r>=40?'#e8870f':'#1F56D6';
+    const slowSrc=skus.filter(s=>s.stock>0&&s.rot>0).slice().sort((a,b)=>b.rot-a.rot);
+    const maxRot=Math.max(...slowSrc.map(s=>s.rot));
+    const mapSlow=s=>({sku:s.desc,rotLabel:s.rot+' d',color:rotColor(s.rot),barStyle:{height:'100%',width:(s.rot/maxRot*100)+'%',background:rotColor(s.rot),borderRadius:'6px'}});
+    const slowAll=slowSrc.map(mapSlow);
+    const slowTop=slowSrc.slice(0,5).map(mapSlow);
+
+    // movements
+    const typeMap={'Ingreso':['#e7f6ee','#1b7a47','#1f9d57'],'Salida':['#fbf3d6','#8a6a12','#d4a813'],'Ajuste':['#fde8e8','#c0322f','#E23B3B']};
+    const mapMov=m=>{ const c=typeMap[m.tipo]; const pos=m.qty>=0;
+      return {...m, typeBadge:{display:'inline-flex',alignItems:'center',padding:'3px 10px',borderRadius:'999px',fontSize:'11.5px',fontWeight:700,background:c[0],color:c[1]},
+        dotStyle:{width:'11px',height:'11px',borderRadius:'50%',flex:'none',background:c[2],boxShadow:'0 0 0 3px '+c[0]},
+        qtyLabel:(pos?'+':'−')+Math.abs(m.qty)+' u.', qtyStyle:{color:pos?'#1b7a47':'#c0322f'}}; };
+    const movItems=this.MOVS.map(mapMov);
+    const movTop=movItems.slice(0,5);
+    const movFiltered = st.movFilter==='Todos' ? movItems : movItems.filter(m=>m.tipo===st.movFilter);
+    const chipBase={padding:'8px 15px',borderRadius:'999px',fontSize:'13px',fontWeight:600,cursor:'pointer'};
+    const movChips=['Todos','Ingreso','Salida','Ajuste'].map(label=>({label,
+      style: st.movFilter===label ? {...chipBase,background:primary,color:'#fff',border:'1px solid '+primary} : {...chipBase,background:'#fff',color:'#5b6472',border:'1px solid #e3e6ec'},
+      onClick:()=>this.setState({movFilter:label}) }));
+
+    // inventory
+    const q=st.query.trim().toLowerCase();
+    const filtered=skus.filter(s=> (st.group==='all'||s.groupId===st.group) && (!q || (s.desc+' '+s.sku+' '+s.groupName+' '+s.compat).toLowerCase().includes(q)));
+    const invRows=filtered.map(s=>{ const status=this.statusOf(s); const b=this.badgeStock(status); const bad=status==='Agotado'||status==='Stock bajo';
+      return { desc:s.desc, sku:s.sku, groupName:s.groupName, stock:s.stock, min:s.min,
+        statusLabel:b.label, statusStyle:b.style, statusDot:b.dot,
+        rotLabel:s.rot>0?(s.rot+' d'):'—', rotColor:s.rot>=60?'#E23B3B':s.rot>=40?'#e8870f':s.rot>0?'#5b6472':'#c4c9d2',
+        rowStyle:{cursor:'pointer',background:(emph&&bad)?'#fff8f8':'#fff'},
+        open:()=>this.setState({sel:s}) }; });
+    const groupNameById=id=>{ const g=this.GROUPS.find(x=>x.id===id); return g?g.name:''; };
+
+    // group chips
+    const gcBase={padding:'8px 15px',borderRadius:'999px',fontSize:'13px',fontWeight:600,cursor:'pointer'};
+    const groupChips=[{id:'all',label:'Todos'}].concat(this.GROUPS.map(g=>({id:g.id,label:g.name}))).map(g=>({label:g.label,
+      style: st.group===g.id ? {...gcBase,background:primary,color:'#fff',border:'1px solid '+primary} : {...gcBase,background:'#fff',color:'#5b6472',border:'1px solid #e3e6ec'},
+      onClick:()=>this.setState({group:g.id}) }));
+
+    // compras
+    const comprasRows=skus.filter(s=>['Agotado','Stock bajo'].includes(this.statusOf(s))).map(s=>{ const prio=s.stock===0?'Crítica':'Alta';
+      return {desc:s.desc,sku:s.sku,groupName:s.groupName,actual:s.stock,min:s.min,sugerido:Math.max(s.min*2-s.stock,s.min),prio,actualColor:s.stock===0?'#c0322f':'#b3640f',prioStyle:sevBadge(prio)}; });
+    comprasRows.sort((a,b)=>ord[a.prio]-ord[b.prio]);
+    const unitsRep=comprasRows.reduce((s,r)=>s+r.sugerido,0);
+    const totalMin=skus.reduce((s,x)=>s+x.min,0);
+    const repKpis=[
+      {label:'Unidades a reponer',value:String(unitsRep),sub:comprasRows.length+' SKUs bajo mínimo'},
+      {label:'SKUs en exceso',value:String(skus.filter(s=>this.statusOf(s)==='Exceso').length),sub:'candidatos a pausar compra'},
+      {label:'Rotación lenta',value:String(skus.filter(s=>s.rot>=60).length),sub:'SKUs ≥ 60 días en stock'},
+      {label:'Cobertura',value:(Math.round(totalAll/totalMin*10)/10)+'×',sub:'stock total vs mínimos'},
+    ];
+
+    // kpis
+    const kpiDot=c=>({width:'8px',height:'8px',borderRadius:'50%',background:c,flex:'none'});
+    const rotArr=skus.filter(s=>s.stock>0&&s.rot>0);
+    const avgRot=Math.round(rotArr.reduce((s,x)=>s+x.rot,0)/rotArr.length);
+    const inStock=skus.filter(s=>s.stock>0).length;
+    const kpis=[
+      {label:'Unidades en stock',value:String(totalAll),sub:skus.length+' SKUs · '+inStock+' con stock',dot:kpiDot('#1F56D6')},
+      {label:'Grupos',value:String(this.GROUPS.length),sub:skus.length+' SKUs clasificados',dot:kpiDot('#1b7a47')},
+      {label:'Alertas activas',value:String(alerts.length),sub:critCount+' críticas · '+altaCount+' altas',dot:kpiDot('#E23B3B')},
+      {label:'Rotación promedio',value:avgRot+' d',sub:'meta ≤ 30 días',dot:kpiDot('#e8870f')},
+      {label:'Movimientos (7d)',value:String(this.MOVS.length),sub:'ingresos, salidas y ajustes',dot:kpiDot('#5b6472')},
+    ];
+
+    const titles={dashboard:['Panel general','Resumen de stock, alertas y movimientos de repuestos'],inventario:['Inventario','Repuestos clasificados por grupo y SKU'],alertas:['Alertas automáticas','Reposición, rotación y exceso de stock'],movimientos:['Trazabilidad de movimientos','Ingresos, salidas y ajustes'],reportes:['Reportes','Decisiones de compra y rotación']};
+
+    const sel=st.sel;
+    const selStatus=sel?this.badgeStock(this.statusOf(sel)):null;
+
+    return {
+      showLogin:!st.loggedIn, showApp:st.loggedIn,
+      nGroups:this.GROUPS.length, nSkus:skus.length, nUnits:totalAll,
+      user:st.user, pass:st.pass, query:st.query, group:st.group, notifCount:alerts.length,
+      onUser:e=>this.setState({user:e.target.value}), onPass:e=>this.setState({pass:e.target.value}),
+      onQuery:e=>this.setState({query:e.target.value}), onGroup:e=>this.setState({group:e.target.value}),
+      login:()=>this.setState({loggedIn:true}), logout:()=>this.setState({loggedIn:false,view:null}),
+      nav, onNav, groupOpts:this.GROUPS.map(g=>({id:g.id,name:g.name})),
+      sideStyle:{width:'248px',flex:'none',display:'flex',flexDirection:'column',background: dark?'#1b2230':'#ffffff', borderRight: dark?'none':'1px solid #eef1f5'},
+      sideFootStyle:{padding:'14px 16px',borderTop: dark?'1px solid rgba(255,255,255,0.08)':'1px solid #eef1f5'},
+      brandText: dark?'#fff':'#1b2230', brandSub: dark?'rgba(255,255,255,0.5)':'#8a93a3',
+      navBadge:{minWidth:'20px',height:'18px',padding:'0 5px',borderRadius:'9px',background:'#E23B3B',color:'#fff',fontSize:'10.5px',fontWeight:700,display:'flex',alignItems:'center',justifyContent:'center',flex:'none'},
+      viewTitle:titles[view][0], viewSub:titles[view][1],
+      vDash:view==='dashboard', vInv:view==='inventario', vAlert:view==='alertas', vMov:view==='movimientos', vRep:view==='reportes',
+      kpis, alertsTop:alerts.slice(0,5), movTop, slowTop, groupBars,
+      alerts, critCount, altaCount, mediaCount,
+      groupChips, invRows, invEmpty:invRows.length===0, invCount:filtered.length, invUnits:filtered.reduce((s,x)=>s+x.stock,0), groupLabel: st.group==='all'?'':('· '+groupNameById(st.group)),
+      movChips, movFiltered,
+      repKpis, comprasRows, slowAll,
+      drawerOpen:!!sel,
+      drawerGroup:sel?sel.groupName:'', drawerSku:sel?sel.sku:'', drawerDesc:sel?sel.desc:'', drawerStock:sel?sel.stock:0, drawerMin:sel?sel.min:0,
+      drawerRot:sel?(sel.rot>0?sel.rot+' d':'—'):'', drawerRotColor:sel?(sel.rot>=60?'#E23B3B':sel.rot>=40?'#e8870f':'#1b2230'):'#1b2230', drawerCompat:sel?sel.compat:'',
+      drawerStatusLabel:selStatus?selStatus.label:'', drawerStatusStyle:selStatus?selStatus.style:{}, drawerStatusDot:selStatus?selStatus.dot:{},
+      drawerHistory:sel?this.genHistory(sel):[],
+      closeDrawer:()=>this.setState({sel:null})
+    };
+  }
+}
+</script>
+</body>
+</html>
