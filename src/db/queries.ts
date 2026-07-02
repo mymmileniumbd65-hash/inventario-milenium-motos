@@ -1,22 +1,10 @@
-import { eq, desc, sql } from 'drizzle-orm';
+import { eq, desc } from 'drizzle-orm';
 import { db } from './client';
 import { groups, parts, movements } from './schema';
 import type { PartInput, MovementInput } from '../lib/inventory';
 
 export async function getGroups() {
   return db.select().from(groups).orderBy(groups.name);
-}
-
-export interface InventorySummary { groups: number; skus: number; }
-
-// Lightweight headline counts for the login screen. Deliberately excludes the
-// total unit count so no stock figure is exposed on the public (pre-auth) page.
-export async function getInventorySummary(): Promise<InventorySummary> {
-  const [[g], [p]] = await Promise.all([
-    db.select({ n: sql<number>`count(*)::int` }).from(groups),
-    db.select({ n: sql<number>`count(*)::int` }).from(parts),
-  ]);
-  return { groups: g.n, skus: p.n };
 }
 
 export async function getPartsWithMovements(): Promise<PartInput[]> {

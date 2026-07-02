@@ -1,20 +1,7 @@
 import Crown from '@/components/Crown';
-import { getInventorySummary } from '@/db/queries';
 import LoginForm from './LoginForm';
 
-// Cache the (public) login page and refresh the headline stats at most hourly,
-// so anonymous visits don't hit the DB on every request but the numbers don't
-// go stale for long either.
-export const revalidate = 3600;
-
-export default async function LoginPage() {
-  let summary: { groups: number; skus: number } | null = null;
-  try {
-    summary = await getInventorySummary();
-  } catch {
-    summary = null; // never block login on a stats read
-  }
-
+export default function LoginPage() {
   return (
     <div style={{ position: 'fixed', inset: 0, display: 'flex', fontFamily: 'Manrope, system-ui, sans-serif', background: '#f6f7f9' }}>
       <div style={{ position: 'relative', overflow: 'hidden', width: '44%', minWidth: 380, background: '#1b2230', color: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '52px 56px' }}>
@@ -40,11 +27,7 @@ export default async function LoginPage() {
           </div>
         </div>
 
-        <div style={{ position: 'relative', fontFamily: 'IBM Plex Mono, monospace', fontSize: 12.5, letterSpacing: '.04em', color: 'rgba(255,255,255,.5)' }}>
-          {summary
-            ? `${summary.groups} grupos · ${summary.skus} SKUs`
-            : ' '}
-        </div>
+        <div style={{ position: 'relative' }} />
       </div>
 
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40 }}>
