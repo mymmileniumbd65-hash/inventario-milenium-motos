@@ -54,3 +54,44 @@ export async function createMovement(formData: FormData): Promise<ActionResult> 
   revalidatePath('/');
   return { success: true };
 }
+
+// Voids a movement by inserting a compensating reversal (type 'ajuste' with the
+// negated quantity) instead of editing/deleting the original — the ledger stays
+// immutable and every correction is attributable to whoever made it.
+export async function reverseMovement(id: string): Promise<ActionResult> {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { error: 'Debes iniciar sesión.' };
+
+  const [orig] = await db.select().from(movements).where(eq(movements.id, id)).limit(1);
+  if (!orig) return { error: 'El movimiento no existe.' };
+  if (orig.reversesMovementId) return { error: 'No se puede anular una anulación.' };
+
+  const [already] = await db.select().from(movements).where(eq(movements.reversesMovementId, id)).limit(1);
+  if (already) return { error: 'Este movimiento ya fue anulado.' };
+
+  const partMovements = await db.select().from(movements).where(eq(movements.partId, orig.partId));
+  const currentStock = computeStock(partMovements.map((m) => ({ type: m.type, qty: m.qty, createdAt: m.createdAt })));
+  if (currentStock - orig.qty < 0) {
+    return { error: `No se puede anular: dejaría el stock en ${currentStock - orig.qty}. Hay ${currentStock} unidades disponibles.` };
+  }
+
+  await db.insert(movements).values({
+    partId: orig.partId,
+    type: 'ajuste',
+    qty: -orig.qty,
+    fromLocation: orig.toLocation,
+    toLocation: orig.fromLocation,
+    referenceCode: `ANULA ${orig.referenceCode}`,
+    userId: user.id,
+    userEmail: user.email ?? 'desconocido',
+    reversesMovementId: orig.id,
+  });
+
+  revalidatePath('/inventario');
+  revalidatePath('/movimientos');
+  revalidatePath('/reportes');
+  revalidatePath('/alertas');
+  revalidatePath('/');
+  return { success: true };
+}

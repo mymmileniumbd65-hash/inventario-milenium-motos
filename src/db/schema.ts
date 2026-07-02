@@ -30,5 +30,9 @@ export const movements = pgTable('movements', {
   // Snapshot of the acting user's email at the time of the movement, so the timeline
   // and drawer history don't need to query the auth schema to display "por quién".
   userEmail: text('user_email').notNull(),
+  // When set, this movement is a reversal ("anulación") that cancels the referenced
+  // movement's effect on stock. The original row is never edited or deleted — the
+  // ledger stays immutable and auditable. No FK to keep it simple (self-reference).
+  reversesMovementId: uuid('reverses_movement_id'),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 });

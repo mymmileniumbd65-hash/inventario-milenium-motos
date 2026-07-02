@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Reference-only prototype export (proprietary DSL, not runnable app code).
+    "prototype-extract/**",
   ]),
 ]);
 
