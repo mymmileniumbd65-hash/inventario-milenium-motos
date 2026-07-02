@@ -1,11 +1,10 @@
 'use client';
 
-import { useActionState, useState } from 'react';
+import { useActionState } from 'react';
 import { authenticate } from './actions';
 
 export default function LoginForm() {
   const [errorMessage, formAction, isPending] = useActionState(authenticate, undefined);
-  const [showResetHint, setShowResetHint] = useState(false);
 
   return (
     <form action={formAction} style={{ width: 380, maxWidth: '100%' }}>
@@ -27,23 +26,12 @@ export default function LoginForm() {
         />
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 14 }}>
+      <div style={{ marginTop: 14 }}>
         <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#5b6472', cursor: 'pointer' }}>
           <input name="remember" type="checkbox" defaultChecked style={{ width: 15, height: 15, accentColor: '#1F56D6' }} />
           Recordarme
         </label>
-        <button
-          type="button" onClick={() => setShowResetHint((v) => !v)}
-          style={{ background: 'none', border: 'none', padding: 0, fontSize: 13, fontWeight: 600, color: '#1F56D6', cursor: 'pointer' }}
-        >
-          ¿Olvidaste tu contraseña?
-        </button>
       </div>
-      {showResetHint && (
-        <div style={{ marginTop: 10, fontSize: 12.5, color: '#5b6472', background: '#f1f3f6', padding: '9px 11px', borderRadius: 9 }}>
-          Solicita el restablecimiento al administrador del sistema.
-        </div>
-      )}
 
       {errorMessage && (
         <div style={{ marginTop: 14, fontSize: 13, color: '#c0322f', background: '#fde8e8', padding: '10px 12px', borderRadius: 9 }}>
