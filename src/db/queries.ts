@@ -7,16 +7,16 @@ export async function getGroups() {
   return db.select().from(groups).orderBy(groups.name);
 }
 
-export interface InventorySummary { groups: number; skus: number; units: number; }
+export interface InventorySummary { groups: number; skus: number; }
 
-// Lightweight headline counts for the login screen (no per-row data).
+// Lightweight headline counts for the login screen. Deliberately excludes the
+// total unit count so no stock figure is exposed on the public (pre-auth) page.
 export async function getInventorySummary(): Promise<InventorySummary> {
-  const [[g], [p], [u]] = await Promise.all([
+  const [[g], [p]] = await Promise.all([
     db.select({ n: sql<number>`count(*)::int` }).from(groups),
     db.select({ n: sql<number>`count(*)::int` }).from(parts),
-    db.select({ n: sql<number>`coalesce(sum(${movements.qty}),0)::int` }).from(movements),
   ]);
-  return { groups: g.n, skus: p.n, units: u.n };
+  return { groups: g.n, skus: p.n };
 }
 
 export async function getPartsWithMovements(): Promise<PartInput[]> {

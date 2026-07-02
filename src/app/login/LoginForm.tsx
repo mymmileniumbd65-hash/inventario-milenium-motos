@@ -26,13 +26,6 @@ export default function LoginForm() {
         />
       </div>
 
-      <div style={{ marginTop: 14 }}>
-        <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#5b6472', cursor: 'pointer' }}>
-          <input name="remember" type="checkbox" defaultChecked style={{ width: 15, height: 15, accentColor: '#1F56D6' }} />
-          Recordarme
-        </label>
-      </div>
-
       {errorMessage && (
         <div style={{ marginTop: 14, fontSize: 13, color: '#c0322f', background: '#fde8e8', padding: '10px 12px', borderRadius: 9 }}>
           {errorMessage}

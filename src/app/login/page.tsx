@@ -8,7 +8,7 @@ import LoginForm from './LoginForm';
 export const revalidate = 3600;
 
 export default async function LoginPage() {
-  let summary: { groups: number; skus: number; units: number } | null = null;
+  let summary: { groups: number; skus: number } | null = null;
   try {
     summary = await getInventorySummary();
   } catch {
@@ -42,7 +42,7 @@ export default async function LoginPage() {
 
         <div style={{ position: 'relative', fontFamily: 'IBM Plex Mono, monospace', fontSize: 12.5, letterSpacing: '.04em', color: 'rgba(255,255,255,.5)' }}>
           {summary
-            ? `${summary.groups} grupos · ${summary.skus} SKUs · ${summary.units} unidades`
+            ? `${summary.groups} grupos · ${summary.skus} SKUs`
             : ' '}
         </div>
       </div>
