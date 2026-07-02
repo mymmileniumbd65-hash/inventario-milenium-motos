@@ -1,18 +1,34 @@
-'use client';
+import Crown from '@/components/Crown';
+import { getInventorySummary } from '@/db/queries';
+import LoginForm from './LoginForm';
 
-import { useActionState } from 'react';
-import { authenticate } from './actions';
+// Cache the (public) login page and refresh the headline stats at most hourly,
+// so anonymous visits don't hit the DB on every request but the numbers don't
+// go stale for long either.
+export const revalidate = 3600;
 
-export default function LoginPage() {
-  const [errorMessage, formAction, isPending] = useActionState(authenticate, undefined);
+export default async function LoginPage() {
+  let summary: { groups: number; skus: number; units: number } | null = null;
+  try {
+    summary = await getInventorySummary();
+  } catch {
+    summary = null; // never block login on a stats read
+  }
 
   return (
     <div style={{ position: 'fixed', inset: 0, display: 'flex', fontFamily: 'Manrope, system-ui, sans-serif', background: '#f6f7f9' }}>
-      <div style={{ width: '44%', minWidth: 380, background: '#1b2230', color: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '52px 56px' }}>
-        <div style={{ lineHeight: 1.05 }}>
-          <div style={{ fontSize: 20, fontWeight: 800 }}>MILENIUM <span style={{ fontWeight: 500, color: 'rgba(255,255,255,.6)' }}>MOTOS</span></div>
+      <div style={{ position: 'relative', overflow: 'hidden', width: '44%', minWidth: 380, background: '#1b2230', color: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '52px 56px' }}>
+        {/* decorative glow */}
+        <div style={{ position: 'absolute', top: -160, right: -140, width: 520, height: 520, borderRadius: '50%', background: 'radial-gradient(circle at center, rgba(31,86,214,0.45), rgba(31,86,214,0) 70%)', pointerEvents: 'none' }} />
+
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 11 }}>
+          <Crown size={34} />
+          <div style={{ fontSize: 20, fontWeight: 800, letterSpacing: '.01em' }}>
+            MILENIUM <span style={{ fontWeight: 500, color: 'rgba(255,255,255,.6)' }}>MOTOS</span>
+          </div>
         </div>
-        <div>
+
+        <div style={{ position: 'relative' }}>
           <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 12, letterSpacing: '.16em', color: 'rgba(255,255,255,.45)', marginBottom: 16 }}>
             INVENTARIO DE REPUESTOS
           </div>
@@ -23,41 +39,16 @@ export default function LoginPage() {
             Control de stock por grupo y SKU, alertas automáticas de reposición, trazabilidad de movimientos y reportes para tus compras.
           </div>
         </div>
-        <div />
+
+        <div style={{ position: 'relative', fontFamily: 'IBM Plex Mono, monospace', fontSize: 12.5, letterSpacing: '.04em', color: 'rgba(255,255,255,.5)' }}>
+          {summary
+            ? `${summary.groups} grupos · ${summary.skus} SKUs · ${summary.units} unidades`
+            : ' '}
+        </div>
       </div>
+
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40 }}>
-        <form action={formAction} style={{ width: 380, maxWidth: '100%' }}>
-          <div style={{ fontSize: 26, fontWeight: 800 }}>Iniciar sesión</div>
-          <div style={{ fontSize: 14, color: '#5b6472', marginTop: 6 }}>Ingresa con tu cuenta del sistema</div>
-
-          <div style={{ marginTop: 28 }}>
-            <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 7 }}>Usuario</label>
-            <input
-              name="email" type="email" required placeholder="admin@mileniummotos.pe"
-              style={{ width: '100%', padding: '13px 14px', border: '1px solid #e3e6ec', borderRadius: 11, fontSize: 14.5, outline: 'none' }}
-            />
-          </div>
-          <div style={{ marginTop: 16 }}>
-            <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 7 }}>Contraseña</label>
-            <input
-              name="password" type="password" required placeholder="••••••••"
-              style={{ width: '100%', padding: '13px 14px', border: '1px solid #e3e6ec', borderRadius: 11, fontSize: 14.5, outline: 'none' }}
-            />
-          </div>
-
-          {errorMessage && (
-            <div style={{ marginTop: 14, fontSize: 13, color: '#c0322f', background: '#fde8e8', padding: '10px 12px', borderRadius: 9 }}>
-              {errorMessage}
-            </div>
-          )}
-
-          <button
-            type="submit" disabled={isPending}
-            style={{ width: '100%', marginTop: 24, padding: 14, background: '#1F56D6', color: '#fff', border: 'none', borderRadius: 11, fontSize: 15, fontWeight: 700, cursor: 'pointer' }}
-          >
-            {isPending ? 'Ingresando…' : 'Ingresar al sistema'}
-          </button>
-        </form>
+        <LoginForm />
       </div>
     </div>
   );
