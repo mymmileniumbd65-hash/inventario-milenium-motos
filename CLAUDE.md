@@ -13,6 +13,8 @@ Do not freehand new features from the spec alone — continue executing the plan
 - `docs/superpowers/specs/2026-06-30-inventario-repuestos-design.md` — the approved spec: what the app does, its scope, data model, and business rules.
 - `docs/superpowers/plans/2026-06-30-inventario-repuestos.md` — the approved, task-by-task implementation plan (file paths, exact code, commands, commit points). This is the source of truth for *how* to build the rest of the app.
 - `.superpowers/sdd/progress.md` — the execution ledger: which tasks are complete, their commit ranges, and every Minor finding deferred from task reviews (read this before resuming work — it lists what the final whole-branch review still needs to triage).
+- `docs/FLUJO-DE-TRABAJO.md` — operational workflow (in Spanish): how a warehouse user works the app day-to-day (groups → parts → movements → alerts → reports) and the business rules the system enforces.
+- `docs/FLUJO-DESARROLLO.md` — development workflow (in Spanish): environment setup, commands, repo map, the SDD task-by-task process, the browserless verification pattern, git conventions, the post-audit security checklist, and Vercel deploy.
 - `prototype-extract/` — a Claude Design export of the original UI prototype (reference only, not runnable code — uses a proprietary `<x-dc>`/`sc-if`/`sc-for` DSL). Use it only to confirm exact colors, copy, layout, and the original business-logic formulas already translated into `src/lib/inventory.ts`.
 - `prototype-extract/screenshots/` show a different, out-of-scope design (motorcycle-unit tracking) — not part of this app, see the spec's "Contexto" section.
 

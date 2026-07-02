@@ -1,36 +1,49 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Inventario de Repuestos — Milenium Motos
 
-## Getting Started
+Sistema de gestión de inventario de repuestos para Milenium Motos. El stock se
+clasifica por **grupo → SKU** y se **calcula en vivo** a partir de los movimientos
+(ingreso/salida/ajuste) — nunca se almacena un contador. Incluye CRUD de grupos y
+repuestos, registro de movimientos, alertas automáticas de reposición, trazabilidad
+y reportes de compra/rotación, todo protegido tras login con Supabase Auth.
 
-First, run the development server:
+## Documentación
+
+- **[Flujo de trabajo operativo](docs/FLUJO-DE-TRABAJO.md)** — cómo usar la app en
+  el día a día del almacén: crear grupos y repuestos, registrar movimientos, leer
+  alertas y reportes, y las reglas de negocio que el sistema aplica.
+- **[Flujo de trabajo de desarrollo](docs/FLUJO-DESARROLLO.md)** — puesta a punto del
+  entorno, comandos, mapa del repositorio, el proceso de desarrollo por tareas (SDD),
+  verificación, convenciones de git, checklist de seguridad y despliegue.
+- **[CLAUDE.md](CLAUDE.md)** — estado del proyecto y notas de arquitectura.
+- **[Spec](docs/superpowers/specs/2026-06-30-inventario-repuestos-design.md)** y
+  **[plan](docs/superpowers/plans/2026-06-30-inventario-repuestos.md)** aprobados.
+
+## Stack
+
+Next.js 16 (App Router, TypeScript) · Supabase (Postgres + Auth) · Drizzle ORM ·
+Vitest · despliegue en Vercel.
+
+## Inicio rápido
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+cp .env.example .env.local   # completa con los valores reales de Supabase
+npm run db:push              # empuja el esquema a la base de datos
+npm run db:seed              # crea el admin + catálogo de ejemplo
+npm run dev                  # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Detalle completo del entorno, los comandos y el despliegue en
+[docs/FLUJO-DESARROLLO.md](docs/FLUJO-DESARROLLO.md).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Comandos
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Comando | Descripción |
+|---|---|
+| `npm run dev` | Servidor de desarrollo. |
+| `npm run build` | Build de producción. |
+| `npm run lint` | ESLint. |
+| `npm test` | Suite de tests (Vitest). |
+| `npm run db:generate` | Genera una migración Drizzle desde el esquema. |
+| `npm run db:push` | Empuja el esquema a la base de datos. |
+| `npm run db:seed` | Siembra admin + catálogo de ejemplo. |
