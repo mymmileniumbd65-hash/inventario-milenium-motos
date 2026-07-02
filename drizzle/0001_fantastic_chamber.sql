@@ -1,0 +1,1 @@
+ALTER TABLE "movements" ADD COLUMN "reverses_movement_id" uuid;

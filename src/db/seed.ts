@@ -1,3 +1,4 @@
+import { randomBytes } from 'crypto';
 import { createClient } from '@supabase/supabase-js';
 import { db } from './client';
 import { groups, parts, movements } from './schema';
@@ -7,8 +8,12 @@ const supabaseAdmin = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 );
 
-const ADMIN_EMAIL = 'admin@mileniummotos.pe';
-const ADMIN_PASSWORD = '***REDACTED***';
+// Credentials come from the environment, never hardcoded in source. If no
+// password is supplied the seed generates a strong random one and prints it
+// once — copy it somewhere safe, it is not stored anywhere else.
+const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL ?? 'admin@mileniummotos.pe';
+const ADMIN_PASSWORD = process.env.SEED_ADMIN_PASSWORD ?? randomBytes(12).toString('base64url');
+const PASSWORD_WAS_GENERATED = !process.env.SEED_ADMIN_PASSWORD;
 
 const CATALOG: { id: string; name: string; skus: { sku: string; desc: string; compat: string; min: number; initialStock: number }[] }[] = [
   { id: 'PAR', name: 'Parabrisas', skus: [
@@ -103,7 +108,13 @@ async function main() {
     }
   }
 
-  console.log(`Seed complete. Admin login: ${ADMIN_EMAIL} / ${ADMIN_PASSWORD}`);
+  if (PASSWORD_WAS_GENERATED) {
+    console.log(`Seed complete. Admin: ${ADMIN_EMAIL}`);
+    console.log(`Generated admin password (shown once, store it now): ${ADMIN_PASSWORD}`);
+    console.log('Note: if this admin already existed, its password was NOT changed — set SEED_ADMIN_PASSWORD or rotate it in Supabase.');
+  } else {
+    console.log(`Seed complete. Admin: ${ADMIN_EMAIL} (password from SEED_ADMIN_PASSWORD).`);
+  }
   process.exit(0);
 }
 

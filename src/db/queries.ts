@@ -33,6 +33,7 @@ export interface MovementRow {
   id: string; type: 'ingreso' | 'salida' | 'ajuste'; qty: number;
   fromLocation: string; toLocation: string; referenceCode: string; createdAt: Date;
   userEmail: string; partSku: string; partDescription: string;
+  reversesMovementId: string | null;
 }
 
 export async function getRecentMovements(limit = 100): Promise<MovementRow[]> {
@@ -42,6 +43,7 @@ export async function getRecentMovements(limit = 100): Promise<MovementRow[]> {
       fromLocation: movements.fromLocation, toLocation: movements.toLocation,
       referenceCode: movements.referenceCode, createdAt: movements.createdAt,
       userEmail: movements.userEmail, partSku: parts.sku, partDescription: parts.description,
+      reversesMovementId: movements.reversesMovementId,
     })
     .from(movements)
     .innerJoin(parts, eq(movements.partId, parts.id))
@@ -56,6 +58,7 @@ export async function getMovementsByPartId(partId: string): Promise<MovementRow[
       fromLocation: movements.fromLocation, toLocation: movements.toLocation,
       referenceCode: movements.referenceCode, createdAt: movements.createdAt,
       userEmail: movements.userEmail, partSku: parts.sku, partDescription: parts.description,
+      reversesMovementId: movements.reversesMovementId,
     })
     .from(movements)
     .innerJoin(parts, eq(movements.partId, parts.id))

@@ -6,7 +6,7 @@ import type { PartComputed } from '@/lib/inventory';
 import PartDrawer from './PartDrawer';
 import MovementFormModal from './MovementFormModal';
 import PartFormModal from './PartFormModal';
-import GroupFormModal from './GroupFormModal';
+import GroupManagerModal from './GroupManagerModal';
 
 const STATUS_COLORS: Record<string, [string, string, string]> = {
   Disponible: ['#e7f6ee', '#1b7a47', '#1f9d57'],
@@ -22,7 +22,7 @@ export default function InventarioView({ groups, parts }: { groups: { id: string
   const [selectedPart, setSelectedPart] = useState<PartComputed | null>(null);
   const [showMovementForm, setShowMovementForm] = useState(false);
   const [showPartForm, setShowPartForm] = useState<PartComputed | 'new' | null>(null);
-  const [showGroupForm, setShowGroupForm] = useState(false);
+  const [showGroupManager, setShowGroupManager] = useState(false);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -52,8 +52,8 @@ export default function InventarioView({ groups, parts }: { groups: { id: string
           <option value="all">Todos los grupos</option>
           {groups.map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}
         </select>
-        <button onClick={() => setShowGroupForm(true)} style={{ padding: '10px 16px', borderRadius: 10, border: '1px solid #e3e6ec', background: '#fff', fontWeight: 700, fontSize: 13.5, cursor: 'pointer' }}>
-          + Grupo
+        <button onClick={() => setShowGroupManager(true)} style={{ padding: '10px 16px', borderRadius: 10, border: '1px solid #e3e6ec', background: '#fff', fontWeight: 700, fontSize: 13.5, cursor: 'pointer' }}>
+          Grupos
         </button>
         <button onClick={() => setShowPartForm('new')} style={{ padding: '10px 16px', borderRadius: 10, border: '1px solid #e3e6ec', background: '#fff', fontWeight: 700, fontSize: 13.5, cursor: 'pointer' }}>
           + Repuesto
@@ -108,7 +108,15 @@ export default function InventarioView({ groups, parts }: { groups: { id: string
         {filtered.length === 0 && <div style={{ padding: 36, textAlign: 'center', color: '#8a93a3' }}>Sin resultados para tu búsqueda.</div>}
       </div>
 
-      {selectedPart && <PartDrawer part={selectedPart} onClose={() => setSelectedPart(null)} />}
+      {selectedPart && (
+        <PartDrawer
+          part={selectedPart}
+          onClose={() => setSelectedPart(null)}
+          onEdit={(p) => { setSelectedPart(null); setShowPartForm(p); }}
+          onDeleted={() => { setSelectedPart(null); refresh(); }}
+          onChanged={refresh}
+        />
+      )}
       {showMovementForm && (
         <MovementFormModal
           parts={parts}
@@ -124,10 +132,11 @@ export default function InventarioView({ groups, parts }: { groups: { id: string
           onSuccess={() => { setShowPartForm(null); refresh(); }}
         />
       )}
-      {showGroupForm && (
-        <GroupFormModal
-          onClose={() => setShowGroupForm(false)}
-          onSuccess={() => { setShowGroupForm(false); refresh(); }}
+      {showGroupManager && (
+        <GroupManagerModal
+          groups={groups}
+          onClose={() => setShowGroupManager(false)}
+          onChanged={refresh}
         />
       )}
     </div>

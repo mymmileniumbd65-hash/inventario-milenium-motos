@@ -32,6 +32,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# ...but keep the template versioned so new devs have a reference.
+!.env.example
 
 # vercel
 .vercel
