@@ -15,20 +15,13 @@ export default async function DashboardPage() {
   const movementsLast7Days = (await getRecentMovements(1000)).filter((m) => m.createdAt >= sevenDaysAgo).length;
   const kpis = buildDashboardKpis(parts, groups.length, alerts, movementsLast7Days);
 
-  const slowest = parts
-    .filter((p) => p.stock > 0 && p.rotationDays !== null)
-    .sort((a, b) => (b.rotationDays ?? 0) - (a.rotationDays ?? 0))
-    .slice(0, 5);
-
   return (
     <>
       <Header title="Panel general" subtitle="Resumen de stock, alertas y movimientos de repuestos" alertCount={alerts.length} />
       <main style={{ flex: 1, overflow: 'auto', padding: '26px 28px 40px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5,1fr)', gap: 16 }}>
-          <KpiCard label="Unidades en stock" value={String(kpis.totalUnits)} sub={`${kpis.totalSkus} SKUs · ${kpis.inStockSkus} con stock`} dotColor="#1F56D6" />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16 }}>
           <KpiCard label="Grupos" value={String(kpis.totalGroups)} sub={`${kpis.totalSkus} SKUs clasificados`} dotColor="#1b7a47" />
           <KpiCard label="Alertas activas" value={String(kpis.activeAlerts)} sub={`${kpis.criticalAlerts} críticas · ${kpis.highAlerts} altas`} dotColor="#E23B3B" />
-          <KpiCard label="Rotación promedio" value={kpis.avgRotationDays !== null ? `${kpis.avgRotationDays} d` : '—'} sub="meta ≤ 30 días" dotColor="#e8870f" />
           <KpiCard label="Movimientos (7d)" value={String(kpis.movementsLast7Days)} sub="ingresos, salidas y ajustes" dotColor="#5b6472" />
         </div>
 
@@ -66,19 +59,6 @@ export default async function DashboardPage() {
             </div>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-            <div style={{ background: '#fff', border: '1px solid #eef1f5', borderRadius: 16, padding: '18px 20px' }}>
-              <div style={{ fontSize: 15, fontWeight: 800, marginBottom: 14 }}>Rotación más lenta</div>
-              {slowest.map((p) => (
-                <div key={p.id} style={{ marginBottom: 14 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span style={{ fontSize: 13, fontWeight: 600 }}>{p.description}</span>
-                    <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 12.5, fontWeight: 600 }}>{p.rotationDays} d</span>
-                  </div>
-                </div>
-              ))}
-              {slowest.length === 0 && <div style={{ fontSize: 13, color: '#8a93a3' }}>Sin datos de rotación todavía.</div>}
-              <div style={{ fontSize: 11.5, color: '#8a93a3', marginTop: 2 }}>Días de cobertura estimados a partir de las salidas de los últimos 90 días.</div>
-            </div>
             <div style={{ background: '#fff', border: '1px solid #eef1f5', borderRadius: 16, padding: '18px 20px' }}>
               <div style={{ fontSize: 15, fontWeight: 800, marginBottom: 14 }}>Stock por grupo</div>
               {groupBars.map((g) => (

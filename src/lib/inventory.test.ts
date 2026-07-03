@@ -175,7 +175,7 @@ describe('buildGroupBars', () => {
 });
 
 describe('buildDashboardKpis', () => {
-  it('summarizes totals, alerts and average rotation', () => {
+  it('summarizes totals and alerts', () => {
     const parts = computeParts(
       [
         part({ id: 'a', sku: 'A', movements: [{ type: 'ingreso', qty: 55, createdAt: new Date('2026-04-01') }, { type: 'salida', qty: -45, createdAt: new Date('2026-06-01') }] }),
@@ -185,11 +185,9 @@ describe('buildDashboardKpis', () => {
     );
     const alerts = buildAlerts(parts);
     const kpis = buildDashboardKpis(parts, 2, alerts, 3);
-    expect(kpis.totalUnits).toBe(10);
     expect(kpis.totalSkus).toBe(2);
     expect(kpis.totalGroups).toBe(2);
     expect(kpis.criticalAlerts).toBe(1);
-    expect(kpis.avgRotationDays).toBe(20);
     expect(kpis.movementsLast7Days).toBe(3);
   });
 });

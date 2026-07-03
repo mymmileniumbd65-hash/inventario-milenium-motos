@@ -142,25 +142,19 @@ export function buildGroupBars(parts: PartComputed[], groups: { id: string; name
 }
 
 export interface DashboardKpis {
-  totalUnits: number; totalSkus: number; inStockSkus: number; totalGroups: number;
+  totalSkus: number; totalGroups: number;
   activeAlerts: number; criticalAlerts: number; highAlerts: number;
-  avgRotationDays: number | null; movementsLast7Days: number;
+  movementsLast7Days: number;
 }
 
 export function buildDashboardKpis(
   parts: PartComputed[], groupCount: number, alerts: Alert[], movementsLast7Days: number
 ): DashboardKpis {
-  const totalUnits = parts.reduce((s, p) => s + p.stock, 0);
-  const rotating = parts.filter((p): p is PartComputed & { rotationDays: number } => p.stock > 0 && p.rotationDays !== null);
-  const avgRotationDays = rotating.length > 0
-    ? Math.round(rotating.reduce((s, p) => s + p.rotationDays, 0) / rotating.length)
-    : null;
   return {
-    totalUnits, totalSkus: parts.length, inStockSkus: parts.filter((p) => p.stock > 0).length,
-    totalGroups: groupCount, activeAlerts: alerts.length,
+    totalSkus: parts.length, totalGroups: groupCount, activeAlerts: alerts.length,
     criticalAlerts: alerts.filter((a) => a.sev === 'Crítica').length,
     highAlerts: alerts.filter((a) => a.sev === 'Alta').length,
-    avgRotationDays, movementsLast7Days,
+    movementsLast7Days,
   };
 }
 
