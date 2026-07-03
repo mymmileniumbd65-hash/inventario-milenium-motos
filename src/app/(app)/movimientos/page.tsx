@@ -23,7 +23,7 @@ export default async function MovimientosPage({
     <>
       <Header title="Trazabilidad de movimientos" subtitle="Ingresos, salidas y ajustes" alertCount={alertCount} />
       <main style={{ flex: 1, overflow: 'auto', padding: '26px 28px 40px' }}>
-        <MovimientosView movements={movements} year={year} month={month} />
+        <MovimientosView movements={movements} year={year} month={month} currentYear={now.getFullYear()} />
       </main>
     </>
   );

@@ -14,12 +14,16 @@ const TYPE_COLORS: Record<string, [string, string, string]> = {
 const FILTERS = ['Todos', 'ingreso', 'salida', 'ajuste'] as const;
 const FILTER_LABELS: Record<string, string> = { Todos: 'Todos', ingreso: 'Ingreso', salida: 'Salida', ajuste: 'Ajuste' };
 
-function shiftMonth(year: number, month: number, delta: number): { year: number; month: number } {
-  const d = new Date(year, month - 1 + delta, 1);
-  return { year: d.getFullYear(), month: d.getMonth() + 1 };
-}
+const MONTH_NAMES = [
+  'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+  'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+];
 
-export default function MovimientosView({ movements, year, month }: { movements: MovementRow[]; year: number; month: number }) {
+export default function MovimientosView({
+  movements, year, month, currentYear,
+}: {
+  movements: MovementRow[]; year: number; month: number; currentYear: number;
+}) {
   const router = useRouter();
   const [filter, setFilter] = useState<(typeof FILTERS)[number]>('Todos');
   const [reversingId, setReversingId] = useState<string | null>(null);
@@ -35,11 +39,8 @@ export default function MovimientosView({ movements, year, month }: { movements:
     [movements, filter]
   );
 
-  const monthLabel = new Date(year, month - 1, 1).toLocaleDateString('es-PE', { month: 'long', year: 'numeric' });
-
-  function goToMonth(delta: number) {
-    const { year: y, month: m } = shiftMonth(year, month, delta);
-    router.push(`/movimientos?year=${y}&month=${m}`);
+  function goToDate(newYear: number, newMonth: number) {
+    router.push(`/movimientos?year=${newYear}&month=${newMonth}`);
   }
 
   async function handleReverse(m: MovementRow) {
@@ -55,10 +56,27 @@ export default function MovimientosView({ movements, year, month }: { movements:
   return (
     <div>
       <div style={{ position: 'sticky', top: 0, zIndex: 5, background: '#f6f7f9', paddingTop: 4, paddingBottom: 14 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
-          <button onClick={() => goToMonth(-1)} style={navButtonStyle} aria-label="Mes anterior">‹</button>
-          <div style={{ fontSize: 14, fontWeight: 700, textTransform: 'capitalize', minWidth: 150, textAlign: 'center' }}>{monthLabel}</div>
-          <button onClick={() => goToMonth(1)} style={navButtonStyle} aria-label="Mes siguiente">›</button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+          <select
+            value={month}
+            onChange={(e) => goToDate(year, Number(e.target.value))}
+            style={selectStyle}
+            aria-label="Mes"
+          >
+            {MONTH_NAMES.map((name, i) => (
+              <option key={name} value={i + 1}>{name}</option>
+            ))}
+          </select>
+          <select
+            value={year}
+            onChange={(e) => goToDate(Number(e.target.value), month)}
+            style={selectStyle}
+            aria-label="Año"
+          >
+            {[currentYear - 2, currentYear - 1, currentYear].map((y) => (
+              <option key={y} value={y}>{y}</option>
+            ))}
+          </select>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
           {FILTERS.map((f) => (
@@ -130,4 +148,4 @@ export default function MovimientosView({ movements, year, month }: { movements:
   );
 }
 
-const navButtonStyle: React.CSSProperties = { width: 34, height: 34, borderRadius: 8, border: '1px solid #e3e6ec', background: '#fff', fontSize: 16, cursor: 'pointer', color: '#5b6472' };
+const selectStyle: React.CSSProperties = { padding: '8px 12px', border: '1px solid #e3e6ec', borderRadius: 9, fontSize: 13.5, background: '#fff', cursor: 'pointer' };
