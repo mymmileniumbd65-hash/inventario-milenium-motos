@@ -50,15 +50,17 @@ Estructura interna:
 ## Lógica pura testeable
 
 La normalización (minúsculas + sin tildes, vía `String.normalize('NFD')`) y el filtrado se exportan
-como función pura — `filterParts(parts, query)` — para testearse en Vitest sin montar UI, siguiendo
-el patrón del proyecto (lógica de negocio pura con tests; cf. `src/lib/inventory.ts`,
-`movementLogic.ts`). Tests: query vacía devuelve todo; match por SKU; match por descripción;
-insensible a mayúsculas y tildes; sin resultados devuelve `[]`.
+como función pura — `filterParts(parts, query)` — en un archivo hermano `partSearch.ts` (sin JSX,
+para testearse en Vitest sin importar un componente React), siguiendo el patrón del proyecto de
+lógica pura en archivo aparte (cf. `movementLogic.ts` junto a `movementActions.ts`). Tests: query
+vacía devuelve todo; match por SKU; match por descripción; insensible a mayúsculas y tildes; sin
+resultados devuelve `[]`.
 
 ## Cambios en archivos
 
-- **Nuevo:** `src/app/(app)/inventario/PartCombobox.tsx` (componente + `filterParts`).
-- **Nuevo:** `src/app/(app)/inventario/PartCombobox.test.ts` (tests de `filterParts`).
+- **Nuevo:** `src/app/(app)/inventario/partSearch.ts` (`filterParts` + normalización).
+- **Nuevo:** `src/app/(app)/inventario/partSearch.test.ts` (tests de `filterParts`).
+- **Nuevo:** `src/app/(app)/inventario/PartCombobox.tsx` (el componente).
 - **Modificado:** `MovementFormModal.tsx` — el `Field "Repuesto"` pasa a renderizar
   `<PartCombobox parts={parts} name="partId" />`; el submit gana el guard de selección válida.
 
