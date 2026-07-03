@@ -20,6 +20,25 @@ After the 17 plan tasks, the user requested a security audit and several enhance
 - **UI redesign** of login and sidebar to match the Claude Design reference: a `Crown` logo mark (`src/components/Crown.tsx`), sidebar nav icons + user block, login split into a server `page.tsx` + client `LoginForm.tsx`. (Login intentionally has no "remember me", "forgot password", or public stats — those were removed at the user's request.)
 - **New docs:** `docs/FLUJO-DE-TRABAJO.md`, `docs/FLUJO-DESARROLLO.md`, and a real `README.md`.
 
+### In-progress work (2026-07-03 session — "ajustes varios", PAUSED mid-branch)
+
+The user batched 6 small UX/bug-fix requests (spotted while browser-testing) on branch `feat/cambios-varios`. Fully speced and planned; executing via `superpowers:subagent-driven-development`, one task per commit, task-reviewed:
+
+- Spec: `docs/superpowers/specs/2026-07-02-ajustes-varios-design.md`.
+- Plan: `docs/superpowers/plans/2026-07-02-ajustes-varios.md` (6 tasks).
+- Ledger: `.superpowers/sdd/progress.md`, section `## Plan: 2026-07-02-ajustes-varios`.
+
+**Status: Task 1/6 complete, session paused here at the user's request (going to sleep) — resume with the remaining 5 tasks next session, no further input needed to continue.**
+
+- ✅ **Task 1 — rotation bug fix** (commit `290ed4e`, review clean): `computeRotationDays` in `src/lib/inventory.ts` no longer counts a voided (anulado) `salida` as real demand. Root cause was that a reversed movement's original row is never edited (ledger is immutable) — it kept counting toward sell-through velocity even after being compensated by an `ajuste`. `MovementInput` gained optional `id`/`reversesMovementId` fields, propagated through `getPartsWithMovements` (`src/db/queries.ts`) and `PartDrawer.tsx`'s live recompute.
+- ⏳ **Task 2** — Reportes: remove "SKUs en exceso" and "Cobertura" KPI cards.
+- ⏳ **Task 3** — Panel general: remove "Unidades en stock" and "Rotación promedio" KPI cards, and the "Rotación más lenta" block (duplicated Reportes' rotation-per-SKU).
+- ⏳ **Task 4** — Modal "Registrar movimiento": dynamic "Origen" placeholder per movement type (Proveedor/Cliente/Proveedor o Cliente), remove the "Destino" field (server now hardcodes `toLocation: 'Almacén'`).
+- ⏳ **Task 5** — Optional "Comentarios" field on movements: **includes a `movements.comment` DB migration** (`npm run db:generate` + `npm run db:push` against the live Supabase DB — the plan flags this step to pause and confirm with the user before running, since there's no staging environment).
+- ⏳ **Task 6** — Movimientos: month/year filter (server-queried, replaces the flat 500-row limit) defaulting to the current month, plus a sticky Todos/Ingreso/Salida/Ajuste filter bar.
+
+To resume: read the plan file above, check the ledger for what's done, and continue subagent-driven-development at Task 2 (`scripts/task-brief docs/superpowers/plans/2026-07-02-ajustes-varios.md 2`). No new user decisions are needed — all ambiguities were already resolved during brainstorming (see the spec's "Comportamiento deseado" sections).
+
 Do not freehand new features from the spec alone — continue executing the plan below, task by task, via `superpowers:subagent-driven-development` or `superpowers:executing-plans`.
 
 - `docs/superpowers/specs/2026-06-30-inventario-repuestos-design.md` — the approved spec: what the app does, its scope, data model, and business rules.
