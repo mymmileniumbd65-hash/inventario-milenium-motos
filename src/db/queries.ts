@@ -18,7 +18,7 @@ export async function getPartsWithMovements(): Promise<PartInput[]> {
   const movementsByPart = new Map<string, MovementInput[]>();
   for (const m of allMovements) {
     const list = movementsByPart.get(m.partId) ?? [];
-    list.push({ type: m.type, qty: m.qty, createdAt: m.createdAt });
+    list.push({ id: m.id, type: m.type, qty: m.qty, createdAt: m.createdAt, reversesMovementId: m.reversesMovementId });
     movementsByPart.set(m.partId, list);
   }
 

@@ -44,8 +44,8 @@ export default function PartDrawer({
 
   // Live stock/rotation recomputed from the loaded history, so the stat boxes stay
   // correct after a reversal without reopening the drawer. Falls back to the prop.
-  const liveStock = history ? computeStock(history.map((h) => ({ type: h.type, qty: h.qty, createdAt: new Date(h.createdAt) }))) : part.stock;
-  const liveRotation = history ? computeRotationDays(history.map((h) => ({ type: h.type, qty: h.qty, createdAt: new Date(h.createdAt) }))) : part.rotationDays;
+  const liveStock = history ? computeStock(history.map((h) => ({ id: h.id, type: h.type, qty: h.qty, createdAt: new Date(h.createdAt), reversesMovementId: h.reversesMovementId }))) : part.stock;
+  const liveRotation = history ? computeRotationDays(history.map((h) => ({ id: h.id, type: h.type, qty: h.qty, createdAt: new Date(h.createdAt), reversesMovementId: h.reversesMovementId }))) : part.rotationDays;
 
   async function handleDelete() {
     if (!confirm(`¿Eliminar el repuesto ${part.sku}? Esta acción no se puede deshacer.`)) return;

@@ -65,6 +65,31 @@ describe('computeRotationDays', () => {
     );
     expect(rotation).toBeNull();
   });
+
+  it('excludes a voided salida from the rotation velocity calculation', () => {
+    // Same-day ingreso of 8 units, then a salida of 2 that gets voided right away.
+    // A voided salida is not real demand, so this must yield null (no rotation data).
+    const rotation = computeRotationDays(
+      [
+        { type: 'ingreso', qty: 8, createdAt: now, id: 'in-1' },
+        { type: 'salida', qty: -2, createdAt: now, id: 'out-1' },
+        { type: 'ajuste', qty: 2, createdAt: now, id: 'adj-1', reversesMovementId: 'out-1' },
+      ],
+      now
+    );
+    expect(rotation).toBeNull();
+  });
+
+  it('still counts a salida that was never voided', () => {
+    const rotation = computeRotationDays(
+      [
+        { type: 'ingreso', qty: 55, createdAt: new Date('2026-04-01'), id: 'in-1' },
+        { type: 'salida', qty: -45, createdAt: new Date('2026-06-01'), id: 'out-1' },
+      ],
+      now
+    );
+    expect(rotation).toBe(20);
+  });
 });
 
 const now = new Date('2026-06-30T00:00:00Z');

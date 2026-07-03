@@ -4,6 +4,8 @@ export interface MovementInput {
   type: MovementType;
   qty: number;
   createdAt: Date;
+  id?: string;
+  reversesMovementId?: string | null;
 }
 
 export interface PartInput {
@@ -34,8 +36,11 @@ const ROTATION_WINDOW_DAYS = 90;
 
 export function computeRotationDays(movements: MovementInput[], now: Date = new Date()): number | null {
   const windowStart = new Date(now.getTime() - ROTATION_WINDOW_DAYS * 24 * 60 * 60 * 1000);
+  const voidedIds = new Set(
+    movements.map((m) => m.reversesMovementId).filter((x): x is string => x != null)
+  );
   const salidaUnits = movements
-    .filter((m) => m.type === 'salida' && m.createdAt >= windowStart)
+    .filter((m) => m.type === 'salida' && m.createdAt >= windowStart && !(m.id !== undefined && voidedIds.has(m.id)))
     .reduce((sum, m) => sum + Math.abs(m.qty), 0);
   if (salidaUnits === 0) return null;
   const stock = computeStock(movements);
