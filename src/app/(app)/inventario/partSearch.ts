@@ -2,7 +2,7 @@
 // en archivo aparte para poder testearla en Vitest (mismo patrón que movementLogic.ts).
 
 function normalize(s: string): string {
-  return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
 }
 
 export function filterParts<T extends { sku: string; description: string }>(parts: T[], query: string): T[] {
