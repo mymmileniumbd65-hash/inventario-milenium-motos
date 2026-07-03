@@ -119,6 +119,9 @@ export default function PartDrawer({
                   {h.fromLocation} → {h.toLocation} · {h.referenceCode}
                   {isVoided && <span style={{ marginLeft: 8, fontSize: 11, fontWeight: 700, color: '#c0322f' }}>ANULADO</span>}
                   {isReversal && <span style={{ marginLeft: 8, fontSize: 11, fontWeight: 700, color: '#8a6a12' }}>ANULACIÓN</span>}
+                  {h.comment && (
+                    <div style={{ fontSize: 12, color: '#8a93a3', fontStyle: 'italic', marginTop: 3 }}>{h.comment}</div>
+                  )}
                 </div>
                 <div style={{ textAlign: 'right', fontSize: 11.5, width: 120 }}>
                   <div style={{ fontWeight: 700 }}>{new Date(h.createdAt).toLocaleDateString('es-PE')}</div>

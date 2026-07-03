@@ -60,6 +60,9 @@ export default function MovementFormModal({ parts, onClose, onSuccess }: { parts
         <Field label="Código de referencia">
           <input name="referenceCode" required style={inputStyle} placeholder="OC-1234" />
         </Field>
+        <Field label="Comentarios (opcional)">
+          <textarea name="comment" style={{ ...inputStyle, minHeight: 64, resize: 'vertical' }} placeholder="Detalles adicionales sobre este movimiento…" />
+        </Field>
 
         {localError && (
           <div style={{ marginTop: 10, fontSize: 13, color: '#c0322f', background: '#fde8e8', padding: '10px 12px', borderRadius: 9 }}>

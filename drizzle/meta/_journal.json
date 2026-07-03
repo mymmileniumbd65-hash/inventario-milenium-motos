@@ -15,6 +15,13 @@
       "when": 1782965094631,
       "tag": "0001_fantastic_chamber",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1783085464340,
+      "tag": "0002_dazzling_praxagora",
+      "breakpoints": true
     }
   ]
 }

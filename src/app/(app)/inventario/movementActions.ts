@@ -19,6 +19,7 @@ export async function createMovement(formData: FormData): Promise<ActionResult> 
   const qtyRaw = formData.get('qty') as string | null;
   const fromLocation = (formData.get('fromLocation') as string | null)?.trim();
   const referenceCode = (formData.get('referenceCode') as string | null)?.trim();
+  const commentRaw = (formData.get('comment') as string | null)?.trim();
 
   if (!partId || !type || !qtyRaw || !fromLocation || !referenceCode) {
     return { error: 'Todos los campos son obligatorios.' };
@@ -43,6 +44,7 @@ export async function createMovement(formData: FormData): Promise<ActionResult> 
 
   await db.insert(movements).values({
     partId, type, qty: resolved.qty, fromLocation, toLocation: 'Almacén', referenceCode,
+    comment: commentRaw && commentRaw.length > 0 ? commentRaw : null,
     userId: user.id, userEmail: user.email ?? 'desconocido',
   });
 

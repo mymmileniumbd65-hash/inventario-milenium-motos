@@ -25,6 +25,7 @@ export const movements = pgTable('movements', {
   fromLocation: text('from_location').notNull(),
   toLocation: text('to_location').notNull(),
   referenceCode: text('reference_code').notNull(),
+  comment: text('comment'),
   // Supabase Auth user id (auth.users.id) — no FK, since that table lives in Supabase's own "auth" schema.
   userId: uuid('user_id').notNull(),
   // Snapshot of the acting user's email at the time of the movement, so the timeline
