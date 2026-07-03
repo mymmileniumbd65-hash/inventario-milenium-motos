@@ -55,7 +55,7 @@ export default function MovimientosView({
 
   return (
     <div>
-      <div style={{ position: 'sticky', top: 0, zIndex: 5, background: '#f6f7f9', paddingTop: 4, paddingBottom: 14 }}>
+      <div style={{ position: 'sticky', top: 0, zIndex: 5, background: '#f6f7f9', margin: '-26px -28px 0', padding: '30px 28px 14px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
           <select
             value={month}
