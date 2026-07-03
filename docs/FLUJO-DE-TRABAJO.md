@@ -68,9 +68,10 @@ Campos del movimiento:
 - **Repuesto:** el SKU afectado.
 - **Cantidad:** entero. En ingreso y salida se pone en **positivo** (el sistema
   resta solo en la salida). En ajuste puedes poner negativo para descontar.
-- **Origen → Destino:** de dónde viene y a dónde va (ej. `Proveedor Michelin → Almacén`,
-  `Almacén → Taller`). Sirve para la trazabilidad.
+- **Origen:** de dónde viene (proveedor en un ingreso, cliente en una salida).
+  El destino siempre es el almacén único, así que no se pide. Sirve para la trazabilidad.
 - **Código de referencia:** orden de compra, boleta, guía, etc. (ej. `OC-1234`).
+- **Comentarios (opcional):** notas libres sobre el movimiento.
 
 **Reglas que impone el sistema:**
 - No puedes registrar una **salida mayor al stock disponible** — te avisa
@@ -114,8 +115,8 @@ Reglas de la anulación:
 
 ## 3. Consultar el estado del inventario
 
-- **Panel general:** vista rápida — unidades totales, alertas activas, rotación
-  promedio, movimientos de los últimos 7 días, alertas y movimientos recientes.
+- **Panel general:** vista rápida — grupos, alertas activas, movimientos de los
+  últimos 7 días, alertas y movimientos recientes, y stock por grupo.
 - **Inventario:** la tabla de todos los SKUs. Puedes **buscar** (por descripción,
   SKU, grupo o compatibilidad) y **filtrar por grupo**. Clic en una fila abre el
   **detalle** del repuesto con su historial completo de movimientos.
@@ -153,7 +154,7 @@ La sección **Reportes** ayuda a decidir la próxima compra:
   a pedir (apunta a dejar el stock en el doble del mínimo), priorizados por urgencia.
 - **Rotación por SKU:** días de cobertura estimados (menor = se vende más rápido).
 - **Inventario por grupo:** cuánto pesa cada categoría en el stock total.
-- KPIs: unidades a reponer, SKUs en exceso, rotación lenta y cobertura general.
+- KPIs: unidades a reponer y rotación lenta.
 
 **Flujo típico de compra:** entra a Reportes → mira "Compras sugeridas" → arma el
 pedido al proveedor con las cantidades sugeridas de las prioridades Crítica/Alta →
