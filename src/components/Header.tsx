@@ -10,12 +10,16 @@ export default function Header({ title, subtitle, alertCount }: { title: string;
       <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
         <Link
           href="/alertas"
+          aria-label={alertCount > 0 ? `Alertas (${alertCount} activas)` : 'Alertas'}
           style={{
             position: 'relative', width: 40, height: 40, border: '1px solid #eef1f5', borderRadius: 10,
             background: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#5b6472', textDecoration: 'none',
           }}
         >
-          🔔
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.9} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <path d="M6 10 a6 6 0 0 1 12 0 c0 4.2 1.4 6 2.2 6.8 H3.8 C4.6 16 6 14.2 6 10 Z" />
+            <path d="M10.2 20.5 a1.9 1.9 0 0 0 3.6 0" />
+          </svg>
           {alertCount > 0 && (
             <span style={{
               position: 'absolute', top: -5, right: -5, minWidth: 18, height: 18, padding: '0 4px', background: '#E23B3B',

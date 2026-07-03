@@ -36,7 +36,8 @@ export default function PartCombobox({ parts, name }: { parts: PartComputed[]; n
         e.preventDefault();
         select(matches[highlight]);
       }
-    } else if (e.key === 'Escape') {
+    } else if (e.key === 'Escape' && open) {
+      e.stopPropagation();
       setOpen(false);
     }
   }
@@ -51,6 +52,7 @@ export default function PartCombobox({ parts, name }: { parts: PartComputed[]; n
         type="text"
         value={query}
         placeholder="Buscar por SKU o nombre…"
+        aria-label="Buscar repuesto por SKU o nombre"
         autoComplete="off"
         onFocus={() => setOpen(true)}
         onChange={(e) => { setQuery(e.target.value); setSelectedId(''); setHighlight(0); setOpen(true); }}

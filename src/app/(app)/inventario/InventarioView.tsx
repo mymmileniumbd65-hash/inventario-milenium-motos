@@ -24,6 +24,18 @@ export default function InventarioView({ groups, parts }: { groups: { id: string
   const [showPartForm, setShowPartForm] = useState<PartComputed | 'new' | null>(null);
   const [showGroupManager, setShowGroupManager] = useState(false);
 
+  // If the currently-selected group filter gets deleted elsewhere (e.g. via
+  // "Grupos"), fall back to "all" instead of silently matching nothing. Adjusted
+  // during render (React's recommended pattern for this) rather than in a
+  // useEffect, which would cause an extra post-paint render.
+  const [prevGroups, setPrevGroups] = useState(groups);
+  if (groups !== prevGroups) {
+    setPrevGroups(groups);
+    if (groupFilter !== 'all' && !groups.some((g) => g.id === groupFilter)) {
+      setGroupFilter('all');
+    }
+  }
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return parts.filter((p) => {
@@ -43,10 +55,12 @@ export default function InventarioView({ groups, parts }: { groups: { id: string
         <input
           value={query} onChange={(e) => setQuery(e.target.value)}
           placeholder="Buscar repuesto, SKU o grupo…"
+          aria-label="Buscar repuesto, SKU o grupo"
           style={{ flex: 1, maxWidth: 320, padding: '10px 12px', border: '1px solid #eef1f5', borderRadius: 10, fontSize: 13.5 }}
         />
         <select
           value={groupFilter} onChange={(e) => setGroupFilter(e.target.value)}
+          aria-label="Filtrar por grupo"
           style={{ padding: '10px 12px', border: '1px solid #eef1f5', borderRadius: 10, fontSize: 13.5 }}
         >
           <option value="all">Todos los grupos</option>
@@ -87,7 +101,7 @@ export default function InventarioView({ groups, parts }: { groups: { id: string
                   <tr key={p.id} onClick={() => setSelectedPart(p)} style={{ cursor: 'pointer' }}>
                     <td style={tdStyle}>
                       <div style={{ fontWeight: 700 }}>{p.description}</div>
-                      <div style={{ fontSize: 11.5, color: '#8a93a3', fontFamily: 'IBM Plex Mono, monospace' }}>{p.sku}</div>
+                      <div style={{ fontSize: 11.5, color: '#8a93a3', fontFamily: 'var(--font-mono), monospace' }}>{p.sku}</div>
                     </td>
                     <td style={tdStyle}>
                       <span style={{ fontSize: 12, fontWeight: 600, color: '#5b6472', background: '#f1f3f6', padding: '3px 9px', borderRadius: 7 }}>{p.groupName}</span>

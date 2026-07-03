@@ -2,8 +2,11 @@
 
 import { useState } from 'react';
 import { createGroup, updateGroup, deleteGroup } from './actions';
+import Modal from './Modal';
 
 type Group = { id: string; name: string };
+
+const NAME_MAX_LENGTH = 200;
 
 export default function GroupManagerModal({
   groups, onClose, onChanged,
@@ -53,14 +56,16 @@ export default function GroupManagerModal({
   }
 
   return (
-    <div style={{ position: 'fixed', inset: 0, background: 'rgba(20,26,38,0.42)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div style={{ background: '#fff', borderRadius: 16, padding: 28, width: 460, maxHeight: '86vh', display: 'flex', flexDirection: 'column' }}>
+    <Modal onClose={onClose} disableClose={pending} width={460}>
+      <div style={{ display: 'flex', flexDirection: 'column', maxHeight: '80vh' }}>
         <div style={{ fontSize: 19, fontWeight: 800, marginBottom: 16 }}>Gestionar grupos</div>
 
         <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
           <input
             value={newName} onChange={(e) => setNewName(e.target.value)}
             placeholder="Nuevo grupo (ej. Amortiguadores)"
+            aria-label="Nombre del nuevo grupo"
+            maxLength={NAME_MAX_LENGTH}
             style={{ flex: 1, padding: '10px 12px', border: '1px solid #e3e6ec', borderRadius: 9, fontSize: 13.5 }}
           />
           <button onClick={handleCreate} disabled={pending} style={{ padding: '10px 16px', background: '#1F56D6', color: '#fff', border: 'none', borderRadius: 9, fontWeight: 700, fontSize: 13.5, cursor: pending ? 'default' : 'pointer' }}>
@@ -82,15 +87,17 @@ export default function GroupManagerModal({
                 <>
                   <input
                     value={editName} onChange={(e) => setEditName(e.target.value)} autoFocus
+                    aria-label={`Editar nombre del grupo ${g.name}`}
+                    maxLength={NAME_MAX_LENGTH}
                     style={{ flex: 1, padding: '8px 10px', border: '1px solid #e3e6ec', borderRadius: 8, fontSize: 13.5 }}
                   />
                   <button onClick={() => handleSaveEdit(g.id)} disabled={pending} style={{ padding: '7px 12px', background: '#1F56D6', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}>Guardar</button>
-                  <button onClick={() => setEditingId(null)} style={{ padding: '7px 12px', background: '#fff', border: '1px solid #e3e6ec', borderRadius: 8, fontSize: 12.5, cursor: 'pointer' }}>Cancelar</button>
+                  <button onClick={() => setEditingId(null)} disabled={pending} style={{ padding: '7px 12px', background: '#fff', border: '1px solid #e3e6ec', borderRadius: 8, fontSize: 12.5, cursor: 'pointer' }}>Cancelar</button>
                 </>
               ) : (
                 <>
                   <span style={{ flex: 1, fontSize: 14, fontWeight: 600 }}>{g.name}</span>
-                  <button onClick={() => { setEditingId(g.id); setEditName(g.name); setError(null); }} style={{ padding: '7px 12px', background: '#fff', border: '1px solid #e3e6ec', borderRadius: 8, fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}>Editar</button>
+                  <button onClick={() => { setEditingId(g.id); setEditName(g.name); setError(null); }} disabled={pending} style={{ padding: '7px 12px', background: '#fff', border: '1px solid #e3e6ec', borderRadius: 8, fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}>Editar</button>
                   <button onClick={() => handleDelete(g)} disabled={pending} style={{ padding: '7px 12px', background: '#fff', border: '1px solid #f3c6c6', color: '#c0322f', borderRadius: 8, fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}>Eliminar</button>
                 </>
               )}
@@ -99,9 +106,9 @@ export default function GroupManagerModal({
         </div>
 
         <div style={{ marginTop: 18 }}>
-          <button onClick={onClose} style={{ width: '100%', padding: 12, borderRadius: 10, border: '1px solid #e3e6ec', background: '#fff', fontWeight: 700, cursor: 'pointer' }}>Cerrar</button>
+          <button onClick={onClose} disabled={pending} style={{ width: '100%', padding: 12, borderRadius: 10, border: '1px solid #e3e6ec', background: '#fff', fontWeight: 700, cursor: pending ? 'default' : 'pointer' }}>Cerrar</button>
         </div>
       </div>
-    </div>
+    </Modal>
   );
 }

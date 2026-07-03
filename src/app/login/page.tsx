@@ -3,7 +3,7 @@ import LoginForm from './LoginForm';
 
 export default function LoginPage() {
   return (
-    <div style={{ position: 'fixed', inset: 0, display: 'flex', fontFamily: 'Manrope, system-ui, sans-serif', background: '#f6f7f9' }}>
+    <div style={{ position: 'fixed', inset: 0, display: 'flex', fontFamily: 'var(--font-manrope), system-ui, sans-serif', background: '#f6f7f9' }}>
       <div style={{ position: 'relative', overflow: 'hidden', width: '44%', minWidth: 380, background: '#1b2230', color: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '52px 56px' }}>
         {/* decorative glow */}
         <div style={{ position: 'absolute', top: -160, right: -140, width: 520, height: 520, borderRadius: '50%', background: 'radial-gradient(circle at center, rgba(31,86,214,0.45), rgba(31,86,214,0) 70%)', pointerEvents: 'none' }} />
@@ -16,7 +16,7 @@ export default function LoginPage() {
         </div>
 
         <div style={{ position: 'relative' }}>
-          <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 12, letterSpacing: '.16em', color: 'rgba(255,255,255,.45)', marginBottom: 16 }}>
+          <div style={{ fontFamily: 'var(--font-mono), monospace', fontSize: 12, letterSpacing: '.16em', color: 'rgba(255,255,255,.45)', marginBottom: 16 }}>
             INVENTARIO DE REPUESTOS
           </div>
           <div style={{ fontSize: 34, fontWeight: 800, lineHeight: 1.12, maxWidth: 400 }}>

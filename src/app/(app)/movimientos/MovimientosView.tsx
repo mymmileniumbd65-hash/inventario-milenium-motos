@@ -120,7 +120,7 @@ export default function MovimientosView({
                   </div>
                   <div style={{ fontSize: 13, color: '#5b6472', marginTop: 6 }}>
                     {m.fromLocation} → <b style={{ color: '#1b2230' }}>{m.toLocation}</b>{' '}
-                    <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 12, background: '#f1f3f6', padding: '2px 8px', borderRadius: 6 }}>{m.referenceCode}</span>
+                    <span style={{ fontFamily: 'var(--font-mono), monospace', fontSize: 12, background: '#f1f3f6', padding: '2px 8px', borderRadius: 6 }}>{m.referenceCode}</span>
                   </div>
                   {m.comment && (
                     <div style={{ fontSize: 12.5, color: '#8a93a3', fontStyle: 'italic', marginTop: 4 }}>{m.comment}</div>

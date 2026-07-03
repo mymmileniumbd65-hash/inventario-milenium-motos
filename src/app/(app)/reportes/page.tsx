@@ -46,7 +46,7 @@ export default async function ReportesPage() {
             <tbody>
               {compras.map((r) => (
                 <tr key={r.sku}>
-                  <td style={tdStyle}><div style={{ fontWeight: 700 }}>{r.desc}</div><div style={{ fontSize: 11.5, color: '#8a93a3', fontFamily: 'IBM Plex Mono, monospace' }}>{r.sku}</div></td>
+                  <td style={tdStyle}><div style={{ fontWeight: 700 }}>{r.desc}</div><div style={{ fontSize: 11.5, color: '#8a93a3', fontFamily: 'var(--font-mono), monospace' }}>{r.sku}</div></td>
                   <td style={tdStyle}>{r.groupName}</td>
                   <td style={{ ...tdStyle, textAlign: 'center', fontWeight: 600 }}>{r.actual}</td>
                   <td style={{ ...tdStyle, textAlign: 'center', color: '#8a93a3' }}>{r.min}</td>
@@ -69,7 +69,7 @@ export default async function ReportesPage() {
               <div key={p.id} style={{ marginBottom: 12 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span style={{ fontSize: 13, fontWeight: 600 }}>{p.sku}</span>
-                  <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 12.5, fontWeight: 600 }}>{p.rotationDays} d</span>
+                  <span style={{ fontFamily: 'var(--font-mono), monospace', fontSize: 12.5, fontWeight: 600 }}>{p.rotationDays} d</span>
                 </div>
               </div>
             ))}

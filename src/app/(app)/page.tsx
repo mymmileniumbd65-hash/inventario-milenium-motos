@@ -50,7 +50,7 @@ export default async function DashboardPage() {
                     <div style={{ fontSize: 12, color: '#8a93a3', marginTop: 2 }}>{m.fromLocation} → {m.toLocation} · {m.referenceCode}</div>
                   </div>
                   <div style={{ textAlign: 'right', fontSize: 11.5, color: '#8a93a3' }}>
-                    <div>{m.createdAt.toLocaleDateString('es-PE')}</div>
+                    <div>{m.createdAt.toLocaleString('es-PE')}</div>
                     <div>{m.userEmail}</div>
                   </div>
                 </div>

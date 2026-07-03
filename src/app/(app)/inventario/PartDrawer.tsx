@@ -24,6 +24,16 @@ export default function PartDrawer({
   const [actionError, setActionError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
 
+  const closeDisabled = deleting || reversingId !== null;
+
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape' && !closeDisabled) onClose();
+    }
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [onClose, closeDisabled]);
+
   useEffect(() => {
     let cancelled = false;
     fetch(`/api/parts/${part.id}/movements`)
@@ -70,12 +80,12 @@ export default function PartDrawer({
 
   return (
     <>
-      <div onClick={onClose} style={{ position: 'fixed', inset: 0, background: 'rgba(20,26,38,0.42)', zIndex: 40 }} />
-      <div style={{ position: 'fixed', top: 0, right: 0, bottom: 0, width: 620, maxWidth: '94vw', background: '#fff', zIndex: 41, display: 'flex', flexDirection: 'column' }}>
+      <div onClick={() => { if (!closeDisabled) onClose(); }} style={{ position: 'fixed', inset: 0, background: 'rgba(20,26,38,0.42)', zIndex: 40 }} />
+      <div role="dialog" aria-modal="true" aria-label={`Detalle de ${part.description}`} style={{ position: 'fixed', top: 0, right: 0, bottom: 0, width: 620, maxWidth: '94vw', background: '#fff', zIndex: 41, display: 'flex', flexDirection: 'column' }}>
         <div style={{ padding: '22px 26px', borderBottom: '1px solid #eef1f5' }}>
-          <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 11, color: '#8a93a3' }}>{part.groupName} › {part.sku}</div>
+          <div style={{ fontFamily: 'var(--font-mono), monospace', fontSize: 11, color: '#8a93a3' }}>{part.groupName} › {part.sku}</div>
           <div style={{ fontSize: 21, fontWeight: 800, marginTop: 4 }}>{part.description}</div>
-          <button onClick={onClose} style={{ position: 'absolute', top: 22, right: 26, width: 36, height: 36, border: '1px solid #eef1f5', borderRadius: 10, background: '#fff', cursor: 'pointer' }}>✕</button>
+          <button onClick={onClose} disabled={closeDisabled} aria-label="Cerrar" style={{ position: 'absolute', top: 22, right: 26, width: 36, height: 36, border: '1px solid #eef1f5', borderRadius: 10, background: '#fff', cursor: closeDisabled ? 'default' : 'pointer' }}>✕</button>
         </div>
         <div style={{ padding: '16px 26px 0', display: 'flex', gap: 10 }}>
           <button onClick={() => onEdit(part)} style={{ padding: '9px 16px', borderRadius: 10, border: '1px solid #e3e6ec', background: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
@@ -112,7 +122,7 @@ export default function PartDrawer({
             const canReverse = !isVoided && !isReversal;
             return (
               <div key={h.id} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '13px 0', borderTop: '1px solid #f3f4f7', opacity: isVoided ? 0.55 : 1 }}>
-                <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 14, fontWeight: 700, color: h.qty >= 0 ? '#1b7a47' : '#c0322f', width: 60, textDecoration: isVoided ? 'line-through' : 'none' }}>
+                <span style={{ fontFamily: 'var(--font-mono), monospace', fontSize: 14, fontWeight: 700, color: h.qty >= 0 ? '#1b7a47' : '#c0322f', width: 60, textDecoration: isVoided ? 'line-through' : 'none' }}>
                   {h.qty >= 0 ? '+' : '−'}{Math.abs(h.qty)}
                 </span>
                 <div style={{ flex: 1, fontSize: 12.5, color: '#5b6472' }}>
@@ -123,8 +133,8 @@ export default function PartDrawer({
                     <div style={{ fontSize: 12, color: '#8a93a3', fontStyle: 'italic', marginTop: 3 }}>{h.comment}</div>
                   )}
                 </div>
-                <div style={{ textAlign: 'right', fontSize: 11.5, width: 120 }}>
-                  <div style={{ fontWeight: 700 }}>{new Date(h.createdAt).toLocaleDateString('es-PE')}</div>
+                <div style={{ textAlign: 'right', fontSize: 11.5, width: 145, flex: 'none' }}>
+                  <div style={{ fontWeight: 700 }}>{new Date(h.createdAt).toLocaleString('es-PE')}</div>
                   <div style={{ color: '#8a93a3' }}>por {h.userEmail}</div>
                 </div>
                 {canReverse ? (

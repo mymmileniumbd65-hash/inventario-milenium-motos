@@ -47,7 +47,7 @@ export default function Sidebar({ alertCount, userEmail }: { alertCount: number;
           <div style={{ fontSize: 15, fontWeight: 800, color: '#fff', lineHeight: 1.1 }}>
             MILENIUM <span style={{ fontWeight: 500, color: 'rgba(255,255,255,0.5)' }}>MOTOS</span>
           </div>
-          <div style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 9.5, letterSpacing: '.22em', color: 'rgba(255,255,255,0.5)', marginTop: 2 }}>
+          <div style={{ fontFamily: 'var(--font-mono), monospace', fontSize: 9.5, letterSpacing: '.22em', color: 'rgba(255,255,255,0.5)', marginTop: 2 }}>
             REPUESTOS
           </div>
         </div>

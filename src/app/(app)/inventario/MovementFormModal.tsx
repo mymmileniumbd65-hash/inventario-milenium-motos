@@ -5,6 +5,8 @@ import type { PartComputed } from '@/lib/inventory';
 import { createMovement } from './movementActions';
 import type { ActionResult } from './actions';
 import PartCombobox from './PartCombobox';
+import Modal from './Modal';
+import Field, { inputStyle } from './FormField';
 
 async function action(_prev: ActionResult | null, formData: FormData): Promise<ActionResult> {
   return createMovement(formData);
@@ -26,7 +28,7 @@ export default function MovementFormModal({ parts, onClose, onSuccess }: { parts
   }, [result, onSuccess]);
 
   return (
-    <div style={{ position: 'fixed', inset: 0, background: 'rgba(20,26,38,0.42)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <Modal onClose={onClose} disableClose={isPending}>
       <form
         action={formAction}
         onSubmit={(e) => {
@@ -37,31 +39,32 @@ export default function MovementFormModal({ parts, onClose, onSuccess }: { parts
             setLocalError(null);
           }
         }}
-        style={{ background: '#fff', borderRadius: 16, padding: 28, width: 440 }}
       >
         <div style={{ fontSize: 19, fontWeight: 800, marginBottom: 18 }}>Registrar movimiento</div>
 
         <Field label="Repuesto">
-          <PartCombobox parts={parts} name="partId" />
+          {() => <PartCombobox parts={parts} name="partId" />}
         </Field>
         <Field label="Tipo">
-          <select name="type" required style={inputStyle} value={type} onChange={(e) => setType(e.target.value)}>
-            <option value="ingreso">Ingreso</option>
-            <option value="salida">Salida</option>
-            <option value="ajuste">Ajuste</option>
-          </select>
+          {(id) => (
+            <select id={id} name="type" required style={inputStyle} value={type} onChange={(e) => setType(e.target.value)}>
+              <option value="ingreso">Ingreso</option>
+              <option value="salida">Salida</option>
+              <option value="ajuste">Ajuste</option>
+            </select>
+          )}
         </Field>
         <Field label="Cantidad">
-          <input name="qty" type="number" required style={inputStyle} placeholder="Ej. 10 (usa negativo solo para ajustes)" />
+          {(id) => <input id={id} name="qty" type="number" required max={1_000_000} style={inputStyle} placeholder="Ej. 10 (usa negativo solo para ajustes)" />}
         </Field>
         <Field label="Origen">
-          <input name="fromLocation" required style={inputStyle} placeholder={ORIGEN_PLACEHOLDER[type]} />
+          {(id) => <input id={id} name="fromLocation" required maxLength={200} style={inputStyle} placeholder={ORIGEN_PLACEHOLDER[type]} />}
         </Field>
         <Field label="Código de referencia">
-          <input name="referenceCode" required style={inputStyle} placeholder="OC-1234" />
+          {(id) => <input id={id} name="referenceCode" required maxLength={60} style={inputStyle} placeholder="OC-1234" />}
         </Field>
         <Field label="Comentarios (opcional)">
-          <textarea name="comment" style={{ ...inputStyle, minHeight: 64, resize: 'vertical' }} placeholder="Detalles adicionales sobre este movimiento…" />
+          {(id) => <textarea id={id} name="comment" maxLength={2000} style={{ ...inputStyle, minHeight: 64, resize: 'vertical' }} placeholder="Detalles adicionales sobre este movimiento…" />}
         </Field>
 
         {localError && (
@@ -76,23 +79,12 @@ export default function MovementFormModal({ parts, onClose, onSuccess }: { parts
         )}
 
         <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
-          <button type="button" onClick={onClose} style={{ flex: 1, padding: 12, borderRadius: 10, border: '1px solid #e3e6ec', background: '#fff', cursor: 'pointer' }}>Cancelar</button>
+          <button type="button" onClick={onClose} disabled={isPending} style={{ flex: 1, padding: 12, borderRadius: 10, border: '1px solid #e3e6ec', background: '#fff', cursor: isPending ? 'default' : 'pointer' }}>Cancelar</button>
           <button type="submit" disabled={isPending} style={{ flex: 1, padding: 12, borderRadius: 10, border: 'none', background: '#1F56D6', color: '#fff', fontWeight: 700, cursor: 'pointer' }}>
             {isPending ? 'Guardando…' : 'Registrar'}
           </button>
         </div>
       </form>
-    </div>
+    </Modal>
   );
 }
-
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div style={{ marginBottom: 12 }}>
-      <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 6 }}>{label}</label>
-      {children}
-    </div>
-  );
-}
-
-const inputStyle: React.CSSProperties = { width: '100%', padding: '10px 12px', border: '1px solid #e3e6ec', borderRadius: 9, fontSize: 13.5 };

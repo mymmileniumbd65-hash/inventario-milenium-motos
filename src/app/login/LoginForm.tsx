@@ -12,16 +12,16 @@ export default function LoginForm() {
       <div style={{ fontSize: 14, color: '#5b6472', marginTop: 6 }}>Ingresa con tu cuenta del sistema</div>
 
       <div style={{ marginTop: 28 }}>
-        <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 7 }}>Usuario</label>
+        <label htmlFor="email" style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 7 }}>Usuario</label>
         <input
-          name="email" type="email" required placeholder="admin@mileniummotos.pe"
+          id="email" name="email" type="email" required placeholder="admin@mileniummotos.pe"
           style={inputStyle}
         />
       </div>
       <div style={{ marginTop: 16 }}>
-        <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 7 }}>Contraseña</label>
+        <label htmlFor="password" style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 7 }}>Contraseña</label>
         <input
-          name="password" type="password" required placeholder="••••••••"
+          id="password" name="password" type="password" required placeholder="••••••••"
           style={inputStyle}
         />
       </div>
