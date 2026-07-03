@@ -50,7 +50,20 @@ The user browser-tested the "ajustes varios" work above and reported 3 more obse
 
 - ✅ **Task 1** (commit `05d812d`) — `computeRotationDays`: dynamic window (`windowDays = min(90, max(1, days since the SKU's earliest movement))`) instead of always dividing by a fixed 90, so a SKU with only a day or two of real history no longer shows an absurdly inflated rotation number. SKUs with ≥90 days of history are unaffected (structurally guaranteed).
 - ✅ **Task 2** (commit `fb0efeb`) — Movimientos: replaced the "‹ Junio De 2026 ›" arrow-nav month label with two `<select>` dropdowns (month name, year — current year and 2 prior). `currentYear` is now passed down from the server page rather than computed client-side.
-- ✅ **Task 3** (commit `f168a35`) — fixed a visual gap in the sticky filter bar that showed a movement row peeking through during scroll: the sticky wrapper now uses negative margins to cancel `<main>`'s own padding and re-adds the same padding internally, so its background covers edge-to-edge with no visual change when unscrolled.
+- ⚠️ **Task 3** (commit `f168a35`) — attempted to fix a visual gap in the sticky filter bar using negative margins to cancel `<main>`'s own padding. **The user tested this in Chrome and the gap persisted** (confirmed non-transient — visible even without active scrolling). Superseded by the "fix sticky headers" work below; don't reuse this negative-margin approach elsewhere.
+
+### Completed work (2026-07-03 session cont'd — "fix sticky headers", 2/2 tasks done, root-cause fix)
+
+Task 3 above didn't actually fix the Movimientos gap. Applied `superpowers:systematic-debugging` before attempting a second fix (see `docs/superpowers/specs/2026-07-03-fix-sticky-headers-design.md` for the full root-cause writeup): the likely culprit was `position: sticky` combined with **negative margins**, which is a CSS ambiguity around margin collapsing that can make the browser miscalculate where the element actually "sticks." The fix removes that mechanism entirely rather than trying a third variant of it — `<main>` loses its own padding on both pages; the sticky element gets a plain `padding` (no `margin` anywhere); everything else moves into a sibling `<div>` that owns the remaining padding.
+
+- Spec: `docs/superpowers/specs/2026-07-03-fix-sticky-headers-design.md`.
+- Plan: `docs/superpowers/plans/2026-07-03-fix-sticky-headers.md` (2 tasks).
+- Ledger: `.superpowers/sdd/progress.md`, section `## Plan: 2026-07-03-fix-sticky-headers` (includes the final review's write-up).
+
+**Status: both tasks complete and reviewed clean ("Ready to merge"). Critical pending item: the user's manual browser confirmation that the Movimientos gap is** ***actually*** **gone this time** (a second attempt, after Task 3 above failed) **— and that the new Inventario sticky toolbar works without the same problem.** If the gap is still there after this fix, per `superpowers:systematic-debugging` do NOT try a third variant of padding/margin tricks — that's a human decision point (e.g. abandon `position: sticky` for an `IntersectionObserver`-based approach).
+
+- ✅ **Task 1** (commit `527cb6d`) — Movimientos: removed `<main>`'s padding (`src/app/(app)/movimientos/page.tsx`); the sticky filter-bar div now has only `padding: '26px 28px 14px'` (no `margin`); everything below it (error box + movements card) moved into a new sibling `<div style={{ padding: '0 28px 40px' }}>`.
+- ✅ **Task 2** (commit `deed984`) — Inventario: new feature, same pattern. The search/group-filter/"Grupos"/"+ Repuesto"/"+ Registrar ingreso" toolbar in `InventarioView.tsx` is now `position: sticky` with its own padding; everything below it (SKU count + table card) moved into the same kind of sibling wrapper. The table's own column-header row (`<thead>`) is explicitly **not** sticky — out of scope, deferred if ever wanted (would require restructuring the table card's `overflow: hidden` rounded-corner wrapper).
 
 Next step: run `superpowers:finishing-a-development-branch` to decide how to integrate this work (the branch also carries the earlier `2026-07-02-part-combobox` plan, the `2026-07-02-ajustes-varios` plan, and other post-audit hardening — see git log). No more plan tasks are queued after this one unless the user requests something new.
 
