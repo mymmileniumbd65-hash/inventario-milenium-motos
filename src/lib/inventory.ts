@@ -33,9 +33,14 @@ export function statusOf(stock: number, minStock: number): PartStatus {
 }
 
 const ROTATION_WINDOW_DAYS = 90;
+const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 export function computeRotationDays(movements: MovementInput[], now: Date = new Date()): number | null {
-  const windowStart = new Date(now.getTime() - ROTATION_WINDOW_DAYS * 24 * 60 * 60 * 1000);
+  if (movements.length === 0) return null;
+  const earliestMovementDate = new Date(Math.min(...movements.map((m) => m.createdAt.getTime())));
+  const daysSinceEarliest = (now.getTime() - earliestMovementDate.getTime()) / MS_PER_DAY;
+  const windowDays = Math.min(ROTATION_WINDOW_DAYS, Math.max(1, daysSinceEarliest));
+  const windowStart = new Date(now.getTime() - windowDays * MS_PER_DAY);
   const voidedIds = new Set(
     movements.map((m) => m.reversesMovementId).filter((x): x is string => x != null)
   );
@@ -44,7 +49,7 @@ export function computeRotationDays(movements: MovementInput[], now: Date = new 
     .reduce((sum, m) => sum + Math.abs(m.qty), 0);
   if (salidaUnits === 0) return null;
   const stock = computeStock(movements);
-  const dailyVelocity = salidaUnits / ROTATION_WINDOW_DAYS;
+  const dailyVelocity = salidaUnits / windowDays;
   return Math.round(stock / dailyVelocity);
 }
 

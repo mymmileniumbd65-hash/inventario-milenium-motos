@@ -90,6 +90,38 @@ describe('computeRotationDays', () => {
     );
     expect(rotation).toBe(20);
   });
+
+  it('uses a dynamic window for a SKU with less than 90 days of real history', () => {
+    // Ingreso of 8 units yesterday, salida of 5 today. With the old fixed 90-day
+    // window this diluted to an absurdly high rotation number; with a ~1-day real
+    // window it reflects the actual recent velocity: 5 units/day, stock 3 -> ~1 day.
+    const recentNow = new Date('2026-07-03T12:00:00Z');
+    const rotation = computeRotationDays(
+      [
+        { type: 'ingreso', qty: 8, createdAt: new Date('2026-07-02T12:00:00Z'), id: 'in-1' },
+        { type: 'salida', qty: -5, createdAt: new Date('2026-07-03T09:00:00Z'), id: 'out-1' },
+      ],
+      recentNow
+    );
+    expect(rotation).toBe(1);
+  });
+
+  it('caps the window at 90 days for a SKU with a long history (regression)', () => {
+    // Earliest movement is way more than 90 days before "now" -> the window must
+    // still cap at 90 days, giving the exact same result as the fixed-window formula.
+    const rotation = computeRotationDays(
+      [
+        { type: 'ingreso', qty: 55, createdAt: new Date('2025-01-01'), id: 'in-1' },
+        { type: 'salida', qty: -45, createdAt: new Date('2026-06-01'), id: 'out-1' },
+      ],
+      now
+    );
+    expect(rotation).toBe(20);
+  });
+
+  it('returns null for a part with no movements at all', () => {
+    expect(computeRotationDays([], now)).toBeNull();
+  });
 });
 
 const now = new Date('2026-06-30T00:00:00Z');
