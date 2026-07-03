@@ -14,7 +14,12 @@ const TYPE_COLORS: Record<string, [string, string, string]> = {
 const FILTERS = ['Todos', 'ingreso', 'salida', 'ajuste'] as const;
 const FILTER_LABELS: Record<string, string> = { Todos: 'Todos', ingreso: 'Ingreso', salida: 'Salida', ajuste: 'Ajuste' };
 
-export default function MovimientosView({ movements }: { movements: MovementRow[] }) {
+function shiftMonth(year: number, month: number, delta: number): { year: number; month: number } {
+  const d = new Date(year, month - 1 + delta, 1);
+  return { year: d.getFullYear(), month: d.getMonth() + 1 };
+}
+
+export default function MovimientosView({ movements, year, month }: { movements: MovementRow[]; year: number; month: number }) {
   const router = useRouter();
   const [filter, setFilter] = useState<(typeof FILTERS)[number]>('Todos');
   const [reversingId, setReversingId] = useState<string | null>(null);
@@ -30,6 +35,13 @@ export default function MovimientosView({ movements }: { movements: MovementRow[
     [movements, filter]
   );
 
+  const monthLabel = new Date(year, month - 1, 1).toLocaleDateString('es-PE', { month: 'long', year: 'numeric' });
+
+  function goToMonth(delta: number) {
+    const { year: y, month: m } = shiftMonth(year, month, delta);
+    router.push(`/movimientos?year=${y}&month=${m}`);
+  }
+
   async function handleReverse(m: MovementRow) {
     if (!confirm(`¿Anular este movimiento (${m.qty >= 0 ? '+' : '−'}${Math.abs(m.qty)} u. · ${m.partDescription})? Se registrará un movimiento inverso; el original queda en el historial.`)) return;
     setError(null);
@@ -42,19 +54,26 @@ export default function MovimientosView({ movements }: { movements: MovementRow[
 
   return (
     <div>
-      <div style={{ display: 'flex', gap: 8, marginBottom: 18 }}>
-        {FILTERS.map((f) => (
-          <button
-            key={f} onClick={() => setFilter(f)}
-            style={{
-              padding: '8px 15px', borderRadius: 999, fontSize: 13, fontWeight: 600, cursor: 'pointer',
-              background: filter === f ? '#1F56D6' : '#fff', color: filter === f ? '#fff' : '#5b6472',
-              border: filter === f ? '1px solid #1F56D6' : '1px solid #e3e6ec',
-            }}
-          >
-            {FILTER_LABELS[f]}
-          </button>
-        ))}
+      <div style={{ position: 'sticky', top: 0, zIndex: 5, background: '#f6f7f9', paddingTop: 4, paddingBottom: 14 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
+          <button onClick={() => goToMonth(-1)} style={navButtonStyle} aria-label="Mes anterior">‹</button>
+          <div style={{ fontSize: 14, fontWeight: 700, textTransform: 'capitalize', minWidth: 150, textAlign: 'center' }}>{monthLabel}</div>
+          <button onClick={() => goToMonth(1)} style={navButtonStyle} aria-label="Mes siguiente">›</button>
+        </div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          {FILTERS.map((f) => (
+            <button
+              key={f} onClick={() => setFilter(f)}
+              style={{
+                padding: '8px 15px', borderRadius: 999, fontSize: 13, fontWeight: 600, cursor: 'pointer',
+                background: filter === f ? '#1F56D6' : '#fff', color: filter === f ? '#fff' : '#5b6472',
+                border: filter === f ? '1px solid #1F56D6' : '1px solid #e3e6ec',
+              }}
+            >
+              {FILTER_LABELS[f]}
+            </button>
+          ))}
+        </div>
       </div>
       {error && (
         <div style={{ marginBottom: 14, fontSize: 13, color: '#c0322f', background: '#fde8e8', padding: '10px 12px', borderRadius: 9 }}>
@@ -110,3 +129,5 @@ export default function MovimientosView({ movements }: { movements: MovementRow[
     </div>
   );
 }
+
+const navButtonStyle: React.CSSProperties = { width: 34, height: 34, borderRadius: 8, border: '1px solid #e3e6ec', background: '#fff', fontSize: 16, cursor: 'pointer', color: '#5b6472' };

@@ -1,4 +1,4 @@
-import { eq, desc } from 'drizzle-orm';
+import { eq, desc, and, gte, lt } from 'drizzle-orm';
 import { db } from './client';
 import { groups, parts, movements } from './schema';
 import type { PartInput, MovementInput } from '../lib/inventory';
@@ -63,5 +63,22 @@ export async function getMovementsByPartId(partId: string): Promise<MovementRow[
     .from(movements)
     .innerJoin(parts, eq(movements.partId, parts.id))
     .where(eq(movements.partId, partId))
+    .orderBy(desc(movements.createdAt));
+}
+
+export async function getMovementsForMonth(year: number, month: number): Promise<MovementRow[]> {
+  const start = new Date(Date.UTC(year, month - 1, 1));
+  const end = new Date(Date.UTC(year, month, 1));
+  return db
+    .select({
+      id: movements.id, type: movements.type, qty: movements.qty,
+      fromLocation: movements.fromLocation, toLocation: movements.toLocation,
+      referenceCode: movements.referenceCode, createdAt: movements.createdAt,
+      userEmail: movements.userEmail, partSku: parts.sku, partDescription: parts.description,
+      reversesMovementId: movements.reversesMovementId, comment: movements.comment,
+    })
+    .from(movements)
+    .innerJoin(parts, eq(movements.partId, parts.id))
+    .where(and(gte(movements.createdAt, start), lt(movements.createdAt, end)))
     .orderBy(desc(movements.createdAt));
 }
