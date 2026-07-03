@@ -11,7 +11,7 @@ export default async function InventarioPage() {
   return (
     <>
       <Header title="Inventario" subtitle="Repuestos clasificados por grupo y SKU" alertCount={alertCount} />
-      <main style={{ flex: 1, overflow: 'auto', padding: '26px 28px 40px' }}>
+      <main style={{ flex: 1, overflow: 'auto' }}>
         <InventarioView groups={groups} parts={parts} />
       </main>
     </>

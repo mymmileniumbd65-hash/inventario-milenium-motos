@@ -39,7 +39,7 @@ export default function InventarioView({ groups, parts }: { groups: { id: string
 
   return (
     <div>
-      <div style={{ display: 'flex', gap: 12, marginBottom: 16 }}>
+      <div style={{ position: 'sticky', top: 0, zIndex: 5, background: '#f6f7f9', padding: '26px 28px 16px', display: 'flex', gap: 12 }}>
         <input
           value={query} onChange={(e) => setQuery(e.target.value)}
           placeholder="Buscar repuesto, SKU o grupo…"
@@ -63,49 +63,51 @@ export default function InventarioView({ groups, parts }: { groups: { id: string
         </button>
       </div>
 
-      <div style={{ fontSize: 13, color: '#5b6472', marginBottom: 14 }}>
-        <b>{filtered.length}</b> SKUs · <b>{filtered.reduce((s, p) => s + p.stock, 0)}</b> unidades
-      </div>
+      <div style={{ padding: '0 28px 40px' }}>
+        <div style={{ fontSize: 13, color: '#5b6472', marginBottom: 14 }}>
+          <b>{filtered.length}</b> SKUs · <b>{filtered.reduce((s, p) => s + p.stock, 0)}</b> unidades
+        </div>
 
-      <div style={{ background: '#fff', border: '1px solid #eef1f5', borderRadius: 16, overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr style={{ background: '#fbfbfc' }}>
-              <th style={thStyle}>SKU / Repuesto</th>
-              <th style={thStyle}>Grupo</th>
-              <th style={{ ...thStyle, textAlign: 'center' }}>Stock</th>
-              <th style={{ ...thStyle, textAlign: 'center' }}>Mín</th>
-              <th style={thStyle}>Estado</th>
-              <th style={thStyle}>Rotación</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((p) => {
-              const colors = STATUS_COLORS[p.status];
-              return (
-                <tr key={p.id} onClick={() => setSelectedPart(p)} style={{ cursor: 'pointer' }}>
-                  <td style={tdStyle}>
-                    <div style={{ fontWeight: 700 }}>{p.description}</div>
-                    <div style={{ fontSize: 11.5, color: '#8a93a3', fontFamily: 'IBM Plex Mono, monospace' }}>{p.sku}</div>
-                  </td>
-                  <td style={tdStyle}>
-                    <span style={{ fontSize: 12, fontWeight: 600, color: '#5b6472', background: '#f1f3f6', padding: '3px 9px', borderRadius: 7 }}>{p.groupName}</span>
-                  </td>
-                  <td style={{ ...tdStyle, textAlign: 'center', fontWeight: 800 }}>{p.stock}</td>
-                  <td style={{ ...tdStyle, textAlign: 'center', color: '#8a93a3' }}>{p.minStock}</td>
-                  <td style={tdStyle}>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '3px 9px', borderRadius: 999, fontSize: 12, fontWeight: 600, background: colors[0], color: colors[1] }}>
-                      <span style={{ width: 6, height: 6, borderRadius: '50%', background: colors[2] }} />
-                      {p.status}
-                    </span>
-                  </td>
-                  <td style={tdStyle}>{p.rotationDays !== null ? `${p.rotationDays} d` : '—'}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-        {filtered.length === 0 && <div style={{ padding: 36, textAlign: 'center', color: '#8a93a3' }}>Sin resultados para tu búsqueda.</div>}
+        <div style={{ background: '#fff', border: '1px solid #eef1f5', borderRadius: 16, overflow: 'hidden' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={{ background: '#fbfbfc' }}>
+                <th style={thStyle}>SKU / Repuesto</th>
+                <th style={thStyle}>Grupo</th>
+                <th style={{ ...thStyle, textAlign: 'center' }}>Stock</th>
+                <th style={{ ...thStyle, textAlign: 'center' }}>Mín</th>
+                <th style={thStyle}>Estado</th>
+                <th style={thStyle}>Rotación</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.map((p) => {
+                const colors = STATUS_COLORS[p.status];
+                return (
+                  <tr key={p.id} onClick={() => setSelectedPart(p)} style={{ cursor: 'pointer' }}>
+                    <td style={tdStyle}>
+                      <div style={{ fontWeight: 700 }}>{p.description}</div>
+                      <div style={{ fontSize: 11.5, color: '#8a93a3', fontFamily: 'IBM Plex Mono, monospace' }}>{p.sku}</div>
+                    </td>
+                    <td style={tdStyle}>
+                      <span style={{ fontSize: 12, fontWeight: 600, color: '#5b6472', background: '#f1f3f6', padding: '3px 9px', borderRadius: 7 }}>{p.groupName}</span>
+                    </td>
+                    <td style={{ ...tdStyle, textAlign: 'center', fontWeight: 800 }}>{p.stock}</td>
+                    <td style={{ ...tdStyle, textAlign: 'center', color: '#8a93a3' }}>{p.minStock}</td>
+                    <td style={tdStyle}>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '3px 9px', borderRadius: 999, fontSize: 12, fontWeight: 600, background: colors[0], color: colors[1] }}>
+                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: colors[2] }} />
+                        {p.status}
+                      </span>
+                    </td>
+                    <td style={tdStyle}>{p.rotationDays !== null ? `${p.rotationDays} d` : '—'}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          {filtered.length === 0 && <div style={{ padding: 36, textAlign: 'center', color: '#8a93a3' }}>Sin resultados para tu búsqueda.</div>}
+        </div>
       </div>
 
       {selectedPart && (
