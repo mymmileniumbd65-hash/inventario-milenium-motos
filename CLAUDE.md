@@ -20,24 +20,25 @@ After the 17 plan tasks, the user requested a security audit and several enhance
 - **UI redesign** of login and sidebar to match the Claude Design reference: a `Crown` logo mark (`src/components/Crown.tsx`), sidebar nav icons + user block, login split into a server `page.tsx` + client `LoginForm.tsx`. (Login intentionally has no "remember me", "forgot password", or public stats — those were removed at the user's request.)
 - **New docs:** `docs/FLUJO-DE-TRABAJO.md`, `docs/FLUJO-DESARROLLO.md`, and a real `README.md`.
 
-### In-progress work (2026-07-03 session — "ajustes varios", PAUSED mid-branch)
+### Completed work (2026-07-03 session — "ajustes varios", 6/6 tasks done)
 
-The user batched 6 small UX/bug-fix requests (spotted while browser-testing) on branch `feat/cambios-varios`. Fully speced and planned; executing via `superpowers:subagent-driven-development`, one task per commit, task-reviewed:
+The user batched 6 small UX/bug-fix requests (spotted while browser-testing) on branch `feat/cambios-varios`. Speced, planned, and executed via `superpowers:subagent-driven-development`, one task per commit, task-reviewed, plus a final whole-plan review (clean, "Ready to merge"):
 
 - Spec: `docs/superpowers/specs/2026-07-02-ajustes-varios-design.md`.
 - Plan: `docs/superpowers/plans/2026-07-02-ajustes-varios.md` (6 tasks).
-- Ledger: `.superpowers/sdd/progress.md`, section `## Plan: 2026-07-02-ajustes-varios`.
+- Ledger: `.superpowers/sdd/progress.md`, section `## Plan: 2026-07-02-ajustes-varios` (includes the final review's write-up).
 
-**Status: Task 1/6 complete, session paused here at the user's request (going to sleep) — resume with the remaining 5 tasks next session, no further input needed to continue.**
+**Status: all 6 tasks complete and reviewed clean. Still pending: the user's own manual browser pass** for the parts that curl can't exercise (client-only modals/forms) — registering a movement with a dynamic Origen placeholder and no Destino field (Task 4), with/without a Comentarios note (Task 5), and the Movimientos page's sticky filter bar + month navigator including a year rollover (Task 6).
 
-- ✅ **Task 1 — rotation bug fix** (commit `290ed4e`, review clean): `computeRotationDays` in `src/lib/inventory.ts` no longer counts a voided (anulado) `salida` as real demand. Root cause was that a reversed movement's original row is never edited (ledger is immutable) — it kept counting toward sell-through velocity even after being compensated by an `ajuste`. `MovementInput` gained optional `id`/`reversesMovementId` fields, propagated through `getPartsWithMovements` (`src/db/queries.ts`) and `PartDrawer.tsx`'s live recompute.
-- ⏳ **Task 2** — Reportes: remove "SKUs en exceso" and "Cobertura" KPI cards.
-- ⏳ **Task 3** — Panel general: remove "Unidades en stock" and "Rotación promedio" KPI cards, and the "Rotación más lenta" block (duplicated Reportes' rotation-per-SKU).
-- ⏳ **Task 4** — Modal "Registrar movimiento": dynamic "Origen" placeholder per movement type (Proveedor/Cliente/Proveedor o Cliente), remove the "Destino" field (server now hardcodes `toLocation: 'Almacén'`).
-- ⏳ **Task 5** — Optional "Comentarios" field on movements: **includes a `movements.comment` DB migration** (`npm run db:generate` + `npm run db:push` against the live Supabase DB — the plan flags this step to pause and confirm with the user before running, since there's no staging environment).
-- ⏳ **Task 6** — Movimientos: month/year filter (server-queried, replaces the flat 500-row limit) defaulting to the current month, plus a sticky Todos/Ingreso/Salida/Ajuste filter bar.
+- ✅ **Task 1 — rotation bug fix** (commit `290ed4e`): `computeRotationDays` in `src/lib/inventory.ts` no longer counts a voided (anulado) `salida` as real demand. `MovementInput` gained optional `id`/`reversesMovementId` fields, propagated through `getPartsWithMovements` (`src/db/queries.ts`) and `PartDrawer.tsx`'s live recompute.
+- ✅ **Task 2** (commit `26ae8ac`) — Reportes: removed "SKUs en exceso" and "Cobertura" KPI cards (grid 4→2 columns).
+- ✅ **Task 3** (commit `b5d5d01`) — Panel general: removed "Unidades en stock" and "Rotación promedio" KPI cards (grid 5→3), and the "Rotación más lenta" block (duplicated Reportes' rotation-per-SKU).
+- ✅ **Task 4** (commit `e635249`) — Modal "Registrar movimiento": dynamic "Origen" placeholder per movement type (Proveedor/Cliente/Proveedor o Cliente), removed the "Destino" field (server now hardcodes `toLocation: 'Almacén'`).
+- ✅ **Task 5** (commit `4ebca67`) — Optional "Comentarios" field on movements. **Includes a live DB migration** (`drizzle/0002_dazzling_praxagora.sql`, additive nullable `movements.comment` column) — already generated, pushed to the real Supabase DB, and verified live via `information_schema.columns`. The user explicitly approved running this migration in-session.
+- ✅ **Task 6** (commit `335ec46`) — Movimientos: month/year filter (`getMovementsForMonth` in `src/db/queries.ts`, server-queried, replaces the flat 500-row limit) defaulting to the current month, plus a sticky Todos/Ingreso/Salida/Ajuste filter bar. Month navigation uses native `Date` normalization for year rollovers; the query's month boundaries are computed in UTC (a plan-mandated, low-impact choice for this single-timezone app — noted, not fixed).
+- ✅ Follow-up doc fix (commit `4d6097b`): `docs/FLUJO-DE-TRABAJO.md` updated to drop references to the removed Destino field and the removed KPI cards, and mention the new Comentarios field.
 
-To resume: read the plan file above, check the ledger for what's done, and continue subagent-driven-development at Task 2 (`scripts/task-brief docs/superpowers/plans/2026-07-02-ajustes-varios.md 2`). No new user decisions are needed — all ambiguities were already resolved during brainstorming (see the spec's "Comportamiento deseado" sections).
+Next step: run `superpowers:finishing-a-development-branch` to decide how to integrate this work (the branch also carries the earlier `2026-07-02-part-combobox` plan and other post-audit hardening — see git log). No more plan tasks are queued after this one unless the user requests something new.
 
 Do not freehand new features from the spec alone — continue executing the plan below, task by task, via `superpowers:subagent-driven-development` or `superpowers:executing-plans`.
 
