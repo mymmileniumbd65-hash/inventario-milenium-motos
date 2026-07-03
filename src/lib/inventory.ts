@@ -88,12 +88,15 @@ const SEVERITY_ORDER: Record<AlertSeverity, number> = { Crítica: 0, Alta: 1, Me
 export function buildAlerts(parts: PartComputed[]): Alert[] {
   const alerts: Alert[] = [];
   for (const p of parts) {
-    if (p.stock === 0) {
+    // minStock = 0 means this SKU has no reorder policy configured — flagging
+    // it as critical with a "reponer 0 u." action is a contradiction, not an
+    // alert, so it's excluded from reorder-related alerts entirely.
+    if (p.minStock > 0 && p.stock === 0) {
       alerts.push({
         sev: 'Crítica', tipo: 'Agotado', sku: p.sku, desc: p.description, groupName: p.groupName,
         detail: '0 unidades en stock', accion: `reponer ${p.minStock * 2} u.`,
       });
-    } else if (p.stock < p.minStock) {
+    } else if (p.minStock > 0 && p.stock < p.minStock) {
       alerts.push({
         sev: 'Alta', tipo: 'Stock bajo', sku: p.sku, desc: p.description, groupName: p.groupName,
         detail: `${p.stock} u. · mínimo ${p.minStock} u.`, accion: `reponer ${p.minStock * 2 - p.stock} u.`,
@@ -122,7 +125,7 @@ export interface CompraSugerida {
 
 export function buildComprasSugeridas(parts: PartComputed[]): CompraSugerida[] {
   return parts
-    .filter((p) => p.status === 'Agotado' || p.status === 'Stock bajo')
+    .filter((p) => p.minStock > 0 && (p.status === 'Agotado' || p.status === 'Stock bajo'))
     .map((p) => ({
       sku: p.sku, desc: p.description, groupName: p.groupName,
       actual: p.stock, min: p.minStock,

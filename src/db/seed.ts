@@ -88,25 +88,30 @@ async function main() {
 
   console.log('Seeding groups and parts...');
   const now = new Date();
-  for (const group of CATALOG) {
-    const [insertedGroup] = await db.insert(groups).values({ name: group.name }).returning();
-    for (const s of group.skus) {
-      const [insertedPart] = await db.insert(parts).values({
-        sku: s.sku, description: s.desc, compat: s.compat,
-        groupId: insertedGroup.id, minStock: s.min,
-      }).returning();
+  // Wrapped in a transaction so a failure partway through (e.g. a duplicate
+  // SKU on the Nth group) leaves no partially-seeded groups/parts behind —
+  // either the whole catalog lands, or none of it does.
+  await db.transaction(async (tx) => {
+    for (const group of CATALOG) {
+      const [insertedGroup] = await tx.insert(groups).values({ name: group.name }).returning();
+      for (const s of group.skus) {
+        const [insertedPart] = await tx.insert(parts).values({
+          sku: s.sku, description: s.desc, compat: s.compat,
+          groupId: insertedGroup.id, minStock: s.min,
+        }).returning();
 
-      if (s.initialStock > 0) {
-        await db.insert(movements).values({
-          partId: insertedPart.id, type: 'ingreso', qty: s.initialStock,
-          fromLocation: 'Proveedor', toLocation: 'Almacén',
-          referenceCode: `OC-${insertedPart.sku}`,
-          userId: admin.id, userEmail: admin.email,
-          createdAt: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000),
-        });
+        if (s.initialStock > 0) {
+          await tx.insert(movements).values({
+            partId: insertedPart.id, type: 'ingreso', qty: s.initialStock,
+            fromLocation: 'Proveedor', toLocation: 'Almacén',
+            referenceCode: `OC-${insertedPart.sku}`,
+            userId: admin.id, userEmail: admin.email,
+            createdAt: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000),
+          });
+        }
       }
     }
-  }
+  });
 
   if (PASSWORD_WAS_GENERATED) {
     console.log(`Seed complete. Admin: ${ADMIN_EMAIL}`);

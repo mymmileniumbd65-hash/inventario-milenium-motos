@@ -66,9 +66,14 @@ export async function getMovementsByPartId(partId: string): Promise<MovementRow[
     .orderBy(desc(movements.createdAt));
 }
 
+// Peru is UTC-5 year-round (no DST), so Lima midnight is 05:00 UTC. Computing
+// month boundaries in raw UTC would misfile movements made in the last ~5
+// hours of a Lima calendar day into the next UTC day/month.
+const PERU_UTC_OFFSET_HOURS = 5;
+
 export async function getMovementsForMonth(year: number, month: number): Promise<MovementRow[]> {
-  const start = new Date(Date.UTC(year, month - 1, 1));
-  const end = new Date(Date.UTC(year, month, 1));
+  const start = new Date(Date.UTC(year, month - 1, 1, PERU_UTC_OFFSET_HOURS));
+  const end = new Date(Date.UTC(year, month, 1, PERU_UTC_OFFSET_HOURS));
   return db
     .select({
       id: movements.id, type: movements.type, qty: movements.qty,
