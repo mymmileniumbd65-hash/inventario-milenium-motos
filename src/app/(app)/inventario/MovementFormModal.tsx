@@ -1,9 +1,10 @@
 'use client';
 
-import { useActionState, useEffect } from 'react';
+import { useActionState, useEffect, useState } from 'react';
 import type { PartComputed } from '@/lib/inventory';
 import { createMovement } from './movementActions';
 import type { ActionResult } from './actions';
+import PartCombobox from './PartCombobox';
 
 async function action(_prev: ActionResult | null, formData: FormData): Promise<ActionResult> {
   return createMovement(formData);
@@ -11,6 +12,7 @@ async function action(_prev: ActionResult | null, formData: FormData): Promise<A
 
 export default function MovementFormModal({ parts, onClose, onSuccess }: { parts: PartComputed[]; onClose: () => void; onSuccess: () => void }) {
   const [result, formAction, isPending] = useActionState(action, null);
+  const [localError, setLocalError] = useState<string | null>(null);
 
   useEffect(() => {
     if (result && 'success' in result) onSuccess();
@@ -18,13 +20,22 @@ export default function MovementFormModal({ parts, onClose, onSuccess }: { parts
 
   return (
     <div style={{ position: 'fixed', inset: 0, background: 'rgba(20,26,38,0.42)', zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <form action={formAction} style={{ background: '#fff', borderRadius: 16, padding: 28, width: 440 }}>
+      <form
+        action={formAction}
+        onSubmit={(e) => {
+          if (!new FormData(e.currentTarget).get('partId')) {
+            e.preventDefault();
+            setLocalError('Selecciona un repuesto de la lista');
+          } else {
+            setLocalError(null);
+          }
+        }}
+        style={{ background: '#fff', borderRadius: 16, padding: 28, width: 440 }}
+      >
         <div style={{ fontSize: 19, fontWeight: 800, marginBottom: 18 }}>Registrar movimiento</div>
 
         <Field label="Repuesto">
-          <select name="partId" required style={inputStyle}>
-            {parts.map((p) => <option key={p.id} value={p.id}>{p.sku} · {p.description}</option>)}
-          </select>
+          <PartCombobox parts={parts} name="partId" />
         </Field>
         <Field label="Tipo">
           <select name="type" required style={inputStyle} defaultValue="ingreso">
@@ -46,6 +57,11 @@ export default function MovementFormModal({ parts, onClose, onSuccess }: { parts
           <input name="referenceCode" required style={inputStyle} placeholder="OC-1234" />
         </Field>
 
+        {localError && (
+          <div style={{ marginTop: 10, fontSize: 13, color: '#c0322f', background: '#fde8e8', padding: '10px 12px', borderRadius: 9 }}>
+            {localError}
+          </div>
+        )}
         {result && 'error' in result && (
           <div style={{ marginTop: 10, fontSize: 13, color: '#c0322f', background: '#fde8e8', padding: '10px 12px', borderRadius: 9 }}>
             {result.error}
