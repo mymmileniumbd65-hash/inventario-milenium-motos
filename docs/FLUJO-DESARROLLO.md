@@ -89,7 +89,7 @@ src/
     inventory.ts           TODA la lógica de negocio derivada (pura, testeada)
     inventory.test.ts      Tests de esa lógica
     supabase/              Clientes SSR (server.ts, middleware.ts)
-  middleware.ts            Refresca sesión y protege rutas
+  proxy.ts                 Refresca sesión y protege rutas
 docs/superpowers/          Spec y plan aprobados (fuente de verdad del qué y el cómo)
 .superpowers/sdd/progress.md   Bitácora de ejecución (qué tarea, qué commits, hallazgos)
 ```
