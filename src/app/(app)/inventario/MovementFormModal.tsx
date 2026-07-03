@@ -10,9 +10,16 @@ async function action(_prev: ActionResult | null, formData: FormData): Promise<A
   return createMovement(formData);
 }
 
+const ORIGEN_PLACEHOLDER: Record<string, string> = {
+  ingreso: 'Proveedor',
+  salida: 'Cliente',
+  ajuste: 'Proveedor o Cliente',
+};
+
 export default function MovementFormModal({ parts, onClose, onSuccess }: { parts: PartComputed[]; onClose: () => void; onSuccess: () => void }) {
   const [result, formAction, isPending] = useActionState(action, null);
   const [localError, setLocalError] = useState<string | null>(null);
+  const [type, setType] = useState('ingreso');
 
   useEffect(() => {
     if (result && 'success' in result) onSuccess();
@@ -38,7 +45,7 @@ export default function MovementFormModal({ parts, onClose, onSuccess }: { parts
           <PartCombobox parts={parts} name="partId" />
         </Field>
         <Field label="Tipo">
-          <select name="type" required style={inputStyle} defaultValue="ingreso">
+          <select name="type" required style={inputStyle} value={type} onChange={(e) => setType(e.target.value)}>
             <option value="ingreso">Ingreso</option>
             <option value="salida">Salida</option>
             <option value="ajuste">Ajuste</option>
@@ -48,10 +55,7 @@ export default function MovementFormModal({ parts, onClose, onSuccess }: { parts
           <input name="qty" type="number" required style={inputStyle} placeholder="Ej. 10 (usa negativo solo para ajustes)" />
         </Field>
         <Field label="Origen">
-          <input name="fromLocation" required style={inputStyle} placeholder="Proveedor Michelin" />
-        </Field>
-        <Field label="Destino">
-          <input name="toLocation" required style={inputStyle} placeholder="Almacén" />
+          <input name="fromLocation" required style={inputStyle} placeholder={ORIGEN_PLACEHOLDER[type]} />
         </Field>
         <Field label="Código de referencia">
           <input name="referenceCode" required style={inputStyle} placeholder="OC-1234" />
