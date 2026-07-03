@@ -20,11 +20,9 @@ export default async function ReportesPage() {
     <>
       <Header title="Reportes" subtitle="Decisiones de compra y rotación" alertCount={alertCount} />
       <main style={{ flex: 1, overflow: 'auto', padding: '26px 28px 40px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16, marginBottom: 20 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: 16, marginBottom: 20 }}>
           <ReportKpiCard label="Unidades a reponer" value={String(reportKpis.unitsToReplenish)} sub={`${reportKpis.comprasCount} SKUs bajo mínimo`} />
-          <ReportKpiCard label="SKUs en exceso" value={String(reportKpis.excessCount)} sub="candidatos a pausar compra" />
           <ReportKpiCard label="Rotación lenta" value={String(reportKpis.slowRotationCount)} sub="SKUs ≥ 60 días de cobertura" />
-          <ReportKpiCard label="Cobertura" value={reportKpis.coverageRatio !== null ? `${reportKpis.coverageRatio}×` : '—'} sub="stock total vs mínimos" />
         </div>
 
         <div style={{ background: '#fff', border: '1px solid #eef1f5', borderRadius: 16, overflow: 'hidden', marginBottom: 20 }}>

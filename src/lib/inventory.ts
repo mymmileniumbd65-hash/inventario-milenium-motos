@@ -165,18 +165,13 @@ export function buildDashboardKpis(
 }
 
 export interface ReportKpis {
-  unitsToReplenish: number; comprasCount: number; excessCount: number;
-  slowRotationCount: number; coverageRatio: number | null;
+  unitsToReplenish: number; comprasCount: number; slowRotationCount: number;
 }
 
 export function buildReportKpis(parts: PartComputed[], compras: CompraSugerida[]): ReportKpis {
-  const totalAll = parts.reduce((s, p) => s + p.stock, 0);
-  const totalMin = parts.reduce((s, p) => s + p.minStock, 0);
   return {
     unitsToReplenish: compras.reduce((s, r) => s + r.sugerido, 0),
     comprasCount: compras.length,
-    excessCount: parts.filter((p) => p.status === 'Exceso').length,
     slowRotationCount: parts.filter((p) => p.rotationDays !== null && p.rotationDays >= 60).length,
-    coverageRatio: totalMin > 0 ? Math.round((totalAll / totalMin) * 10) / 10 : null,
   };
 }
