@@ -38,7 +38,21 @@ The user batched 6 small UX/bug-fix requests (spotted while browser-testing) on 
 - ✅ **Task 6** (commit `335ec46`) — Movimientos: month/year filter (`getMovementsForMonth` in `src/db/queries.ts`, server-queried, replaces the flat 500-row limit) defaulting to the current month, plus a sticky Todos/Ingreso/Salida/Ajuste filter bar. Month navigation uses native `Date` normalization for year rollovers; the query's month boundaries are computed in UTC (a plan-mandated, low-impact choice for this single-timezone app — noted, not fixed).
 - ✅ Follow-up doc fix (commit `4d6097b`): `docs/FLUJO-DE-TRABAJO.md` updated to drop references to the removed Destino field and the removed KPI cards, and mention the new Comentarios field.
 
-Next step: run `superpowers:finishing-a-development-branch` to decide how to integrate this work (the branch also carries the earlier `2026-07-02-part-combobox` plan and other post-audit hardening — see git log). No more plan tasks are queued after this one unless the user requests something new.
+### Completed work (2026-07-03 session cont'd — "ajustes post-pruebas", 3/3 tasks done)
+
+The user browser-tested the "ajustes varios" work above and reported 3 more observations, speced/planned/executed the same way (still on `feat/cambios-varios`):
+
+- Spec: `docs/superpowers/specs/2026-07-03-ajustes-post-pruebas-design.md`.
+- Plan: `docs/superpowers/plans/2026-07-03-ajustes-post-pruebas.md` (3 tasks).
+- Ledger: `.superpowers/sdd/progress.md`, section `## Plan: 2026-07-03-ajustes-post-pruebas` (includes the final review's write-up).
+
+**Status: all 3 tasks complete and reviewed clean ("Ready to merge"). Still pending: the user's own manual browser pass** for the client-only parts — selecting different months/years via the new dropdowns, confirming the scroll gap is gone, and confirming a sparse-history SKU's rotation number now looks reasonable.
+
+- ✅ **Task 1** (commit `05d812d`) — `computeRotationDays`: dynamic window (`windowDays = min(90, max(1, days since the SKU's earliest movement))`) instead of always dividing by a fixed 90, so a SKU with only a day or two of real history no longer shows an absurdly inflated rotation number. SKUs with ≥90 days of history are unaffected (structurally guaranteed).
+- ✅ **Task 2** (commit `fb0efeb`) — Movimientos: replaced the "‹ Junio De 2026 ›" arrow-nav month label with two `<select>` dropdowns (month name, year — current year and 2 prior). `currentYear` is now passed down from the server page rather than computed client-side.
+- ✅ **Task 3** (commit `f168a35`) — fixed a visual gap in the sticky filter bar that showed a movement row peeking through during scroll: the sticky wrapper now uses negative margins to cancel `<main>`'s own padding and re-adds the same padding internally, so its background covers edge-to-edge with no visual change when unscrolled.
+
+Next step: run `superpowers:finishing-a-development-branch` to decide how to integrate this work (the branch also carries the earlier `2026-07-02-part-combobox` plan, the `2026-07-02-ajustes-varios` plan, and other post-audit hardening — see git log). No more plan tasks are queued after this one unless the user requests something new.
 
 Do not freehand new features from the spec alone — continue executing the plan below, task by task, via `superpowers:subagent-driven-development` or `superpowers:executing-plans`.
 
