@@ -55,7 +55,7 @@ export default function MovimientosView({
 
   return (
     <div>
-      <div style={{ position: 'sticky', top: 0, zIndex: 5, background: '#f6f7f9', margin: '-26px -28px 0', padding: '30px 28px 14px' }}>
+      <div style={{ position: 'sticky', top: 0, zIndex: 5, background: '#f6f7f9', padding: '26px 28px 14px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
           <select
             value={month}
@@ -93,56 +93,58 @@ export default function MovimientosView({
           ))}
         </div>
       </div>
-      {error && (
-        <div style={{ marginBottom: 14, fontSize: 13, color: '#c0322f', background: '#fde8e8', padding: '10px 12px', borderRadius: 9 }}>
-          {error}
-        </div>
-      )}
-      <div style={{ background: '#fff', border: '1px solid #eef1f5', borderRadius: 16, padding: '8px 24px 18px' }}>
-        {filtered.map((m) => {
-          const colors = TYPE_COLORS[m.type];
-          const isVoided = voidedIds.has(m.id);
-          const isReversal = m.reversesMovementId !== null;
-          const canReverse = !isVoided && !isReversal;
-          return (
-            <div key={m.id} style={{ display: 'flex', gap: 16, alignItems: 'center', padding: '16px 0', borderBottom: '1px solid #f3f4f7', opacity: isVoided ? 0.55 : 1 }}>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <span style={{ display: 'inline-flex', padding: '3px 10px', borderRadius: 999, fontSize: 11.5, fontWeight: 700, background: colors[0], color: colors[1] }}>
-                    {FILTER_LABELS[m.type]}
-                  </span>
-                  <span style={{ fontSize: 14.5, fontWeight: 700, textDecoration: isVoided ? 'line-through' : 'none' }}>
-                    <span style={{ color: m.qty >= 0 ? '#1b7a47' : '#c0322f' }}>{m.qty >= 0 ? '+' : '−'}{Math.abs(m.qty)} u.</span> {m.partDescription}
-                  </span>
-                  {isVoided && <span style={{ fontSize: 11, fontWeight: 700, color: '#c0322f' }}>ANULADO</span>}
-                  {isReversal && <span style={{ fontSize: 11, fontWeight: 700, color: '#8a6a12' }}>ANULACIÓN</span>}
+      <div style={{ padding: '0 28px 40px' }}>
+        {error && (
+          <div style={{ marginBottom: 14, fontSize: 13, color: '#c0322f', background: '#fde8e8', padding: '10px 12px', borderRadius: 9 }}>
+            {error}
+          </div>
+        )}
+        <div style={{ background: '#fff', border: '1px solid #eef1f5', borderRadius: 16, padding: '8px 24px 18px' }}>
+          {filtered.map((m) => {
+            const colors = TYPE_COLORS[m.type];
+            const isVoided = voidedIds.has(m.id);
+            const isReversal = m.reversesMovementId !== null;
+            const canReverse = !isVoided && !isReversal;
+            return (
+              <div key={m.id} style={{ display: 'flex', gap: 16, alignItems: 'center', padding: '16px 0', borderBottom: '1px solid #f3f4f7', opacity: isVoided ? 0.55 : 1 }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <span style={{ display: 'inline-flex', padding: '3px 10px', borderRadius: 999, fontSize: 11.5, fontWeight: 700, background: colors[0], color: colors[1] }}>
+                      {FILTER_LABELS[m.type]}
+                    </span>
+                    <span style={{ fontSize: 14.5, fontWeight: 700, textDecoration: isVoided ? 'line-through' : 'none' }}>
+                      <span style={{ color: m.qty >= 0 ? '#1b7a47' : '#c0322f' }}>{m.qty >= 0 ? '+' : '−'}{Math.abs(m.qty)} u.</span> {m.partDescription}
+                    </span>
+                    {isVoided && <span style={{ fontSize: 11, fontWeight: 700, color: '#c0322f' }}>ANULADO</span>}
+                    {isReversal && <span style={{ fontSize: 11, fontWeight: 700, color: '#8a6a12' }}>ANULACIÓN</span>}
+                  </div>
+                  <div style={{ fontSize: 13, color: '#5b6472', marginTop: 6 }}>
+                    {m.fromLocation} → <b style={{ color: '#1b2230' }}>{m.toLocation}</b>{' '}
+                    <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 12, background: '#f1f3f6', padding: '2px 8px', borderRadius: 6 }}>{m.referenceCode}</span>
+                  </div>
+                  {m.comment && (
+                    <div style={{ fontSize: 12.5, color: '#8a93a3', fontStyle: 'italic', marginTop: 4 }}>{m.comment}</div>
+                  )}
                 </div>
-                <div style={{ fontSize: 13, color: '#5b6472', marginTop: 6 }}>
-                  {m.fromLocation} → <b style={{ color: '#1b2230' }}>{m.toLocation}</b>{' '}
-                  <span style={{ fontFamily: 'IBM Plex Mono, monospace', fontSize: 12, background: '#f1f3f6', padding: '2px 8px', borderRadius: 6 }}>{m.referenceCode}</span>
+                <div style={{ textAlign: 'right', flex: 'none', fontSize: 12 }}>
+                  <div style={{ fontWeight: 700 }}>{new Date(m.createdAt).toLocaleString('es-PE')}</div>
+                  <div style={{ color: '#8a93a3', marginTop: 2 }}>por {m.userEmail}</div>
                 </div>
-                {m.comment && (
-                  <div style={{ fontSize: 12.5, color: '#8a93a3', fontStyle: 'italic', marginTop: 4 }}>{m.comment}</div>
+                {canReverse ? (
+                  <button
+                    onClick={() => handleReverse(m)} disabled={reversingId === m.id}
+                    style={{ flex: 'none', padding: '7px 13px', borderRadius: 8, border: '1px solid #e3e6ec', background: '#fff', fontWeight: 700, fontSize: 12, color: '#5b6472', cursor: reversingId === m.id ? 'default' : 'pointer' }}
+                  >
+                    {reversingId === m.id ? '…' : 'Anular'}
+                  </button>
+                ) : (
+                  <span style={{ flex: 'none', width: 66 }} />
                 )}
               </div>
-              <div style={{ textAlign: 'right', flex: 'none', fontSize: 12 }}>
-                <div style={{ fontWeight: 700 }}>{new Date(m.createdAt).toLocaleString('es-PE')}</div>
-                <div style={{ color: '#8a93a3', marginTop: 2 }}>por {m.userEmail}</div>
-              </div>
-              {canReverse ? (
-                <button
-                  onClick={() => handleReverse(m)} disabled={reversingId === m.id}
-                  style={{ flex: 'none', padding: '7px 13px', borderRadius: 8, border: '1px solid #e3e6ec', background: '#fff', fontWeight: 700, fontSize: 12, color: '#5b6472', cursor: reversingId === m.id ? 'default' : 'pointer' }}
-                >
-                  {reversingId === m.id ? '…' : 'Anular'}
-                </button>
-              ) : (
-                <span style={{ flex: 'none', width: 66 }} />
-              )}
-            </div>
-          );
-        })}
-        {filtered.length === 0 && <div style={{ padding: 36, textAlign: 'center', color: '#8a93a3' }}>Sin movimientos para este filtro.</div>}
+            );
+          })}
+          {filtered.length === 0 && <div style={{ padding: 36, textAlign: 'center', color: '#8a93a3' }}>Sin movimientos para este filtro.</div>}
+        </div>
       </div>
     </div>
   );
