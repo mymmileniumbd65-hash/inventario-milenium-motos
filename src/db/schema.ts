@@ -1,11 +1,12 @@
-import { pgTable, uuid, text, integer, timestamp, pgEnum } from 'drizzle-orm/pg-core';
+import { pgTable, uuid, text, integer, timestamp, pgEnum, uniqueIndex } from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
 
 export const movementTypeEnum = pgEnum('movement_type', ['ingreso', 'salida', 'ajuste']);
 
 export const groups = pgTable('groups', {
   id: uuid('id').defaultRandom().primaryKey(),
   name: text('name').notNull().unique(),
-});
+}).enableRLS();
 
 export const parts = pgTable('parts', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -15,7 +16,7 @@ export const parts = pgTable('parts', {
   groupId: uuid('group_id').notNull().references(() => groups.id),
   minStock: integer('min_stock').notNull().default(0),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-});
+}).enableRLS();
 
 export const movements = pgTable('movements', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -36,4 +37,10 @@ export const movements = pgTable('movements', {
   // ledger stays immutable and auditable. No FK to keep it simple (self-reference).
   reversesMovementId: uuid('reverses_movement_id'),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
-});
+}, (table) => [
+  // Structural guard against double-voiding: at most one reversal per movement,
+  // enforced at the DB level (defense-in-depth against the app-level race).
+  uniqueIndex('movements_reverses_movement_id_unique')
+    .on(table.reversesMovementId)
+    .where(sql`${table.reversesMovementId} IS NOT NULL`),
+]).enableRLS();
