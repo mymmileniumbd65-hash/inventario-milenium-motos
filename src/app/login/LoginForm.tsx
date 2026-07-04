@@ -14,7 +14,7 @@ export default function LoginForm() {
       <div style={{ marginTop: 28 }}>
         <label htmlFor="email" style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 7 }}>Usuario</label>
         <input
-          id="email" name="email" type="email" required placeholder="admin@mileniummotos.pe"
+          id="email" name="email" type="email" required placeholder="***REDACTED***"
           style={inputStyle}
         />
       </div>

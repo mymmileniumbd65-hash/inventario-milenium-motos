@@ -11,7 +11,7 @@ const supabaseAdmin = createClient(
 // Credentials come from the environment, never hardcoded in source. If no
 // password is supplied the seed generates a strong random one and prints it
 // once — copy it somewhere safe, it is not stored anywhere else.
-const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL ?? 'admin@mileniummotos.pe';
+const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL ?? '***REDACTED***';
 const ADMIN_PASSWORD = process.env.SEED_ADMIN_PASSWORD ?? randomBytes(12).toString('base64url');
 const PASSWORD_WAS_GENERATED = !process.env.SEED_ADMIN_PASSWORD;
 
@@ -68,7 +68,7 @@ async function ensureAdminUser(): Promise<{ id: string; email: string }> {
     email: ADMIN_EMAIL,
     password: ADMIN_PASSWORD,
     email_confirm: true,
-    user_metadata: { name: 'Admin' },
+    user_metadata: { name: 'Vendedor' },
   });
   if (created?.user) return { id: created.user.id, email: created.user.email! };
 
