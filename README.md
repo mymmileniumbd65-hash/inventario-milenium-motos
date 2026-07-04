@@ -6,6 +6,8 @@ clasifica por **grupo → SKU** y se **calcula en vivo** a partir de los movimie
 repuestos, registro de movimientos, alertas automáticas de reposición, trazabilidad
 y reportes de compra/rotación, todo protegido tras login con Supabase Auth.
 
+**Producción:** https://milenium-inventario-repuestos.vercel.app
+
 ## Documentación
 
 - **[Flujo de trabajo operativo](docs/FLUJO-DE-TRABAJO.md)** — cómo usar la app en
@@ -21,7 +23,7 @@ y reportes de compra/rotación, todo protegido tras login con Supabase Auth.
 ## Stack
 
 Next.js 16 (App Router, TypeScript) · Supabase (Postgres + Auth) · Drizzle ORM ·
-Vitest · despliegue en Vercel.
+Vitest · desplegado en [Vercel](https://milenium-inventario-repuestos.vercel.app).
 
 ## Inicio rápido
 
