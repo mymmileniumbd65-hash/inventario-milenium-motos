@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { computeStock, statusOf, computeRotationDays, computeParts, buildAlerts, buildComprasSugeridas, buildGroupBars, buildDashboardKpis } from './inventory';
+import { computeStock, statusOf, computeRotationDays, computeParts, buildAlerts, buildComprasSugeridas, buildGroupBars, buildDashboardKpis, buildReportKpis } from './inventory';
 import type { PartInput } from './inventory';
 
 describe('computeStock', () => {
@@ -172,6 +172,52 @@ describe('buildAlerts', () => {
     const alerts = buildAlerts(parts);
     expect(alerts.map((a) => a.sev)).toEqual(['Crítica', 'Alta', 'Media']);
   });
+
+  it('flags a part with rotationDays >= 60 as Media / Baja rotación', () => {
+    // 10 units sold over the last 90 days on a stock of 30 -> velocity ~0.111/day -> ~270 days coverage, well over the 60-day threshold.
+    const parts = computeParts(
+      [
+        part({
+          movements: [
+            { type: 'ingreso', qty: 40, createdAt: new Date('2026-04-01') },
+            { type: 'salida', qty: -10, createdAt: new Date('2026-06-01') },
+          ],
+        }),
+      ],
+      now
+    );
+    const alerts = buildAlerts(parts);
+    expect(alerts.some((a) => a.tipo === 'Baja rotación' && a.sev === 'Media')).toBe(true);
+  });
+});
+
+describe('buildReportKpis', () => {
+  it('summarizes replenishment units, purchase count, and slow-rotation count', () => {
+    const parts = computeParts(
+      [
+        part({ id: 'a', sku: 'A', movements: [] }), // Agotado -> needs replenishment
+        part({
+          id: 'b', sku: 'B',
+          movements: [
+            { type: 'ingreso', qty: 40, createdAt: new Date('2026-04-01') },
+            { type: 'salida', qty: -10, createdAt: new Date('2026-06-01') },
+          ],
+        }), // slow rotation
+        part({ id: 'c', sku: 'C', movements: [{ type: 'ingreso', qty: 20, createdAt: now }] }), // Exceso, no alert relevant here
+      ],
+      now
+    );
+    const compras = buildComprasSugeridas(parts);
+    const kpis = buildReportKpis(parts, compras);
+    expect(kpis.comprasCount).toBe(1);
+    expect(kpis.unitsToReplenish).toBe(compras.reduce((s, r) => s + r.sugerido, 0));
+    expect(kpis.slowRotationCount).toBe(1);
+  });
+
+  it('returns zeros when there is nothing to report', () => {
+    const kpis = buildReportKpis([], []);
+    expect(kpis).toEqual({ unitsToReplenish: 0, comprasCount: 0, slowRotationCount: 0 });
+  });
 });
 
 describe('buildComprasSugeridas', () => {
@@ -203,6 +249,12 @@ describe('buildGroupBars', () => {
     const bars = buildGroupBars(parts, [{ id: 'g1', name: 'Grupo 1' }, { id: 'g2', name: 'Grupo 2' }]);
     expect(bars.find((b) => b.id === 'g1')).toMatchObject({ count: 10, skuCount: 1, pct: 25 });
     expect(bars.find((b) => b.id === 'g2')).toMatchObject({ count: 30, skuCount: 1, pct: 75 });
+  });
+
+  it('returns 0% for every group when total stock across all parts is 0', () => {
+    const parts = computeParts([part({ id: 'a', sku: 'A', groupId: 'g1', groupName: 'Grupo 1', movements: [] })], now);
+    const bars = buildGroupBars(parts, [{ id: 'g1', name: 'Grupo 1' }]);
+    expect(bars[0]).toMatchObject({ count: 0, skuCount: 1, pct: 0 });
   });
 });
 
