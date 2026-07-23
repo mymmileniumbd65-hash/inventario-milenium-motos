@@ -21,4 +21,10 @@ describe('proxy config.matcher', () => {
     expect(regex.test('/favicon.ico')).toBe(false);
     expect(regex.test('/assets/logo.svg')).toBe(false);
   });
+
+  it('excludes PWA icon paths so iOS/Android can fetch them unauthenticated', () => {
+    expect(regex.test('/apple-icon.png')).toBe(false);
+    expect(regex.test('/icons/icon-192.png')).toBe(false);
+    expect(regex.test('/icons/icon-512.png')).toBe(false);
+  });
 });
