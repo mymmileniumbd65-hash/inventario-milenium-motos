@@ -30,4 +30,13 @@ describe('manifest', () => {
     expect(maskable).toBeDefined();
     expect(maskable?.sizes).toBe('512x512');
   });
+
+  it('reuses the same 512x512 file for the maskable purpose (no dedicated safe-zone variant)', () => {
+    const result = manifest();
+    const icons = result.icons ?? [];
+    const any512 = icons.find((i) => i.sizes === '512x512' && i.purpose !== 'maskable');
+    const maskable = icons.find((i) => i.purpose === 'maskable');
+
+    expect(maskable?.src).toBe(any512?.src);
+  });
 });
