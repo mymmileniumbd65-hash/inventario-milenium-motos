@@ -124,8 +124,7 @@ export default function Sidebar({ alertCount, userEmail }: { alertCount: number;
       </div>
     </header>
 
-    <nav className="app-mobile-bottomnav" style={{ display: 'none', position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 20, background: '#1b2230', borderTop: '1px solid rgba(255,255,255,0.08)', paddingBottom: 'env(safe-area-inset-bottom)' }}>
-      <div style={{ display: 'flex', alignItems: 'stretch', height: 60 }}>
+    <nav className="app-mobile-bottomnav" style={{ display: 'none', position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 20, background: '#1b2230', borderTop: '1px solid rgba(255,255,255,0.08)', paddingBottom: 'env(safe-area-inset-bottom)', alignItems: 'stretch', height: 60 }}>
         {NAV_ITEMS.map((item) => {
           const active = pathname === item.href;
           return (
@@ -149,7 +148,6 @@ export default function Sidebar({ alertCount, userEmail }: { alertCount: number;
             </Link>
           );
         })}
-      </div>
     </nav>
     </>
   );
