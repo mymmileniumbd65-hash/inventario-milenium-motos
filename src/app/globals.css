@@ -15,4 +15,16 @@ input, select, button { font-family: inherit; }
     width: 100% !important;
     padding: 24px !important;
   }
+
+  .app-sidebar-desktop {
+    display: none !important;
+  }
+  .app-mobile-topbar,
+  .app-mobile-bottomnav {
+    display: flex !important;
+  }
+  .app-content-area {
+    padding-top: 56px;
+    padding-bottom: calc(60px + env(safe-area-inset-bottom));
+  }
 }

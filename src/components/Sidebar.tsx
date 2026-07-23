@@ -29,18 +29,19 @@ const ICONS: Record<string, React.ReactNode> = {
 };
 
 const NAV_ITEMS = [
-  { href: '/', label: 'Panel general' },
-  { href: '/inventario', label: 'Inventario' },
-  { href: '/alertas', label: 'Alertas' },
-  { href: '/movimientos', label: 'Movimientos' },
-  { href: '/reportes', label: 'Reportes' },
+  { href: '/', label: 'Panel general', mobileLabel: 'Panel' },
+  { href: '/inventario', label: 'Inventario', mobileLabel: 'Inventario' },
+  { href: '/alertas', label: 'Alertas', mobileLabel: 'Alertas' },
+  { href: '/movimientos', label: 'Movimientos', mobileLabel: 'Movim.' },
+  { href: '/reportes', label: 'Reportes', mobileLabel: 'Reportes' },
 ];
 
 export default function Sidebar({ alertCount, userEmail }: { alertCount: number; userEmail: string }) {
   const pathname = usePathname();
 
   return (
-    <aside style={{ width: 248, flex: 'none', display: 'flex', flexDirection: 'column', background: '#1b2230' }}>
+    <>
+    <aside className="app-sidebar-desktop" style={{ width: 248, flex: 'none', display: 'flex', flexDirection: 'column', background: '#1b2230' }}>
       <div style={{ padding: '22px 20px 18px', display: 'flex', alignItems: 'center', gap: 10 }}>
         <Crown size={30} />
         <div>
@@ -100,5 +101,54 @@ export default function Sidebar({ alertCount, userEmail }: { alertCount: number;
         </div>
       </div>
     </aside>
+
+    <header className="app-mobile-topbar" style={{ display: 'none', position: 'fixed', top: 0, left: 0, right: 0, zIndex: 20, height: 56, background: '#1b2230', alignItems: 'center', justifyContent: 'space-between', padding: '0 16px', gap: 10 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 9, minWidth: 0 }}>
+        <Crown size={24} />
+        <div style={{ fontSize: 13.5, fontWeight: 800, color: '#fff', whiteSpace: 'nowrap' }}>
+          MILENIUM <span style={{ fontWeight: 500, color: 'rgba(255,255,255,0.5)' }}>MOTOS</span>
+        </div>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 'none' }}>
+        <div style={{ width: 28, height: 28, borderRadius: 8, background: '#1F56D6', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 11.5 }}>
+          {userEmail.slice(0, 2).toUpperCase()}
+        </div>
+        <form action={signOutAction} style={{ display: 'flex' }}>
+          <button type="submit" title="Salir" aria-label="Salir" style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.6)', padding: 4, display: 'flex' }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.9} strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 4 H7 a2 2 0 0 0-2 2 v12 a2 2 0 0 0 2 2 h8" />
+              <path d="M11 12 H21 M17.5 8.5 L21 12 L17.5 15.5" />
+            </svg>
+          </button>
+        </form>
+      </div>
+    </header>
+
+    <nav className="app-mobile-bottomnav" style={{ display: 'none', position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 20, background: '#1b2230', borderTop: '1px solid rgba(255,255,255,0.08)', paddingBottom: 'env(safe-area-inset-bottom)', alignItems: 'stretch', height: 60 }}>
+        {NAV_ITEMS.map((item) => {
+          const active = pathname === item.href;
+          return (
+            <Link
+              key={item.href} href={item.href}
+              style={{
+                position: 'relative', flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3,
+                textDecoration: 'none', color: active ? '#fff' : 'rgba(255,255,255,0.55)',
+              }}
+            >
+              <span style={{ display: 'flex', opacity: active ? 1 : 0.85 }}>{ICONS[item.href]}</span>
+              <span style={{ fontSize: 10, fontWeight: 600, whiteSpace: 'nowrap' }}>{item.mobileLabel}</span>
+              {item.href === '/alertas' && alertCount > 0 && (
+                <span style={{
+                  position: 'absolute', top: 2, right: '28%', minWidth: 16, height: 16, padding: '0 4px', borderRadius: 8, background: '#E23B3B',
+                  color: '#fff', fontSize: 9.5, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  {alertCount}
+                </span>
+              )}
+            </Link>
+          );
+        })}
+    </nav>
+    </>
   );
 }
