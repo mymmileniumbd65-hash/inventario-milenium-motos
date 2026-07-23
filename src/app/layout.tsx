@@ -1,6 +1,7 @@
-import type { Metadata } from 'next';
 import { Manrope, IBM_Plex_Mono } from 'next/font/google';
 import './globals.css';
+
+export { metadata, viewport } from './pwa-metadata';
 
 const manrope = Manrope({
   subsets: ['latin'],
@@ -15,10 +16,6 @@ const plexMono = IBM_Plex_Mono({
   variable: '--font-mono',
   display: 'swap',
 });
-
-export const metadata: Metadata = {
-  title: 'Milenium Motos · Inventario de Repuestos',
-};
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

@@ -3,16 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "eslint --ignore-pattern public/sw.js",
     "test": "vitest run",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:seed": "tsx --env-file=.env.local src/db/seed.ts"
   },
   "dependencies": {
+    "@serwist/next": "^9.5.12",
     "@supabase/ssr": "^0.12.0",
     "@supabase/supabase-js": "^2.110.0",
     "drizzle-orm": "^0.45.2",
@@ -22,13 +23,16 @@
     "react-dom": "19.2.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "@types/node": "^20",
     "@types/pg": "^8.20.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitest/coverage-v8": "^4.1.9",
     "drizzle-kit": "^0.31.10",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
+    "serwist": "^9.5.12",
     "tsx": "^4.22.4",
     "typescript": "^5",
     "vitest": "^4.1.9"

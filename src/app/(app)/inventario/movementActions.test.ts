@@ -19,4 +19,16 @@ describe('resolveSignedQty', () => {
     expect(resolveSignedQty('ajuste', 3)).toEqual({ ok: true, qty: 3 });
     expect(resolveSignedQty('ajuste', 0)).toEqual({ ok: false, error: 'La cantidad debe ser un número entero distinto de 0.' });
   });
+  it('rejects a non-integer quantity', () => {
+    expect(resolveSignedQty('ingreso', 1.5)).toEqual({
+      ok: false,
+      error: 'La cantidad debe ser un número entero distinto de 0.',
+    });
+  });
+  it('rejects a quantity above the maximum allowed', () => {
+    expect(resolveSignedQty('ajuste', 1_000_001)).toEqual({
+      ok: false,
+      error: 'La cantidad no puede superar 1,000,000 unidades.',
+    });
+  });
 });
