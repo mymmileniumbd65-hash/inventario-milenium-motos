@@ -15,7 +15,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   return (
     <div style={{ position: 'fixed', inset: 0, display: 'flex', minHeight: 0 }}>
       <Sidebar alertCount={alerts.length} userEmail={user.email ?? 'Usuario'} />
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+      <div className="app-content-area" style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
         {children}
       </div>
     </div>
