@@ -4,7 +4,7 @@ import LoginForm from './LoginForm';
 export default function LoginPage() {
   return (
     <div style={{ position: 'fixed', inset: 0, display: 'flex', fontFamily: 'var(--font-manrope), system-ui, sans-serif', background: '#f6f7f9' }}>
-      <div style={{ position: 'relative', overflow: 'hidden', width: '44%', minWidth: 380, background: '#1b2230', color: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '52px 56px' }}>
+      <div className="login-branding-panel" style={{ position: 'relative', overflow: 'hidden', width: '44%', minWidth: 380, background: '#1b2230', color: '#fff', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '52px 56px' }}>
         {/* decorative glow */}
         <div style={{ position: 'absolute', top: -160, right: -140, width: 520, height: 520, borderRadius: '50%', background: 'radial-gradient(circle at center, rgba(31,86,214,0.45), rgba(31,86,214,0) 70%)', pointerEvents: 'none' }} />
 
@@ -30,7 +30,7 @@ export default function LoginPage() {
         <div style={{ position: 'relative' }} />
       </div>
 
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40 }}>
+      <div className="login-form-panel" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 40 }}>
         <LoginForm />
       </div>
     </div>
